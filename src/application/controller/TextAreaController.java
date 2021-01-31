@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
 @Component
-public class TextAreaController {
+public class TextAreaController extends Controller{
 	@FXML
 	public TextArea strategyTextArea;
 

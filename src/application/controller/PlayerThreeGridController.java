@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import application.stage.SpringStage;
 import application.utils.UILoader;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,13 +19,15 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 @Component
-public class Player3GridController {
+public class PlayerThreeGridController extends Controller{
 	private static final String RED_BACKGROUND = "-fx-background-color: #DE1B1B;";
 	private static final String YELLOW_BACKGROUND = "-fx-background-color: #F9EF1B;";
 	
 	@Autowired
-	@Qualifier("textAreaScene")
-	private Scene scene;
+	public SpringStage<TextAreaController> textAreaStage;
+	
+	@Autowired
+	public SpringStage<CardDetailController> cardDetailStage;
 	
 	@FXML
 	public TreeView<String> treeView3;
@@ -45,32 +48,17 @@ public class Player3GridController {
 	public List<Text> handCount3;
 
 	@FXML
-	public void onTreeInsert(ActionEvent e) {
-		try {
-			openTextAreaScenePlaye3();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+	public void onTreeInsertPlayerThree(ActionEvent e) {
+		
 	}
 
-	private void openTextAreaScenePlaye3() throws Exception {
-		Scene scene = UILoader.loadScene("resources/textAreaStrategy.fxml");
-		Stage stage =  new Stage();
-		cardGridEmpty3.get(0).setStyle(RED_BACKGROUND);
-
-		Window window = treeView3.getScene().getWindow();
-		stage.initOwner(window);	
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setScene(scene);
-		stage.show();
-	}
 	@FXML
-	public void onTreeValidationPlayer3(ActionEvent e) {
+	public void onTreeValidationPlayerThree(ActionEvent e) {
 
 	}
 
 	@FXML
-	public void onTreeRemovePlayer3(ActionEvent e) {
+	public void onTreeRemovePlayerThree(ActionEvent e) {
 
 	}
 

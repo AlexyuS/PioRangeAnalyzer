@@ -14,7 +14,7 @@
 <?import java.util.ArrayList?>
 
 
-<GridPane fx:id="playerGrid3" prefHeight="480.0" prefWidth="585.0" style="-fx-background-color: lightGray;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.Player3GridController">
+<GridPane fx:id="playerGrid3" prefHeight="480.0" prefWidth="585.0" style="-fx-background-color: lightGray;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.PlayerThreeGridController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
    </columnConstraints>
@@ -40,8 +40,8 @@
                <contextMenu>
                   <ContextMenu>
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onTreeInsert" onMenuValidation="#onTreeValidationPlayer3" text="Insert tree" />
-                        <MenuItem mnemonicParsing="false" onAction="#onTreeRemovePlayer3" text="Delete tree" />
+                        <MenuItem mnemonicParsing="false" onAction="#onTreeInsertPlayerThree" onMenuValidation="#onTreeValidationPlayerThree" text="Insert tree" />
+                        <MenuItem mnemonicParsing="false" onAction="#onTreeRemovePlayerThree" text="Delete tree" />
                      </items>
                   </ContextMenu>
                </contextMenu>

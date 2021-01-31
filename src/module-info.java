@@ -1,6 +1,7 @@
 module PioRangeAnalyzer {
 	exports application;
 	exports application.controller;
+	exports application.stage;
 	
 	requires java.logging;
 	requires transitive javafx.base;

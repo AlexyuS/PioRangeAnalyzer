@@ -1,30 +1,32 @@
 package application.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import application.utils.UILoader;
+import application.stage.SpringStage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.Window;
 
 @Component
-public class PlayerGridController {
+public class PlayerOneGridController extends Controller{
+	private final static Logger LOGGER = Logger.getLogger(PlayerOneGridController.class.getName());
+
 	private static final String RED_BACKGROUND = "-fx-background-color: #DE1B1B;";
 	private static final String YELLOW_BACKGROUND = "-fx-background-color: #F9EF1B;";
 	
 	@Autowired
-	@Qualifier("textAreaScene")
-	private Scene scene;
+	public SpringStage<TextAreaController> textAreaStage;
+	
+	@Autowired
+	public SpringStage<CardDetailController> cardDetailStage;
 	
 	@FXML
 	public TreeView<String> treeView0;
@@ -45,34 +47,34 @@ public class PlayerGridController {
 	public List<Text> handCount0;
 
 	@FXML
-	public void onTreeInsert(ActionEvent e) {
+	public void onTreeInsertPlayerOne(ActionEvent e) {
 		try {
-			openTextAreaScene();
+			textAreaStage.open();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	private void openTextAreaScene() throws Exception {
-		Scene scene = UILoader.loadScene("resources/textAreaStrategy.fxml");
-		Stage stage =  new Stage();
-		cardGridEmpty0.get(0).setStyle(RED_BACKGROUND);
-
-		Window window = treeView0.getScene().getWindow();
-		stage.initOwner(window);	
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setScene(scene);
-		stage.show();
-	}
 	@FXML
-	public void onTreeValidation(ActionEvent e) {
+	public void onTreeValidationPlayerOne(ActionEvent e) {
 
 	}
 
 	@FXML
-	public void onTreeRemove(ActionEvent e) {
+	public void onTreeRemovePlayerOne(ActionEvent e) {
 
 	}
-
-
+	
+	@FXML
+	public void onMouseEntered(MouseEvent e) {
+	//	LOGGER.info("Hover action detected");
+		cardDetailStage.open();
+	}
+	
+	@FXML
+	public void onMouseExited(MouseEvent e) {
+		LOGGER.info("Hover action detected");
+		textAreaStage.open();
+	}
+	
 }

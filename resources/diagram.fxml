@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import java.util.ArrayList?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1004.0" prefWidth="1182.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.MainController">
 	<children>
@@ -44,16 +45,17 @@
               </rowConstraints>
                <children>
                   <Pane prefHeight="495.0" prefWidth="598.0">
-                  	<fx:include source="playerGrid.fxml" />
+                  	
+                  	 <fx:include fx:id="playerOne" source="playerOneGrid.fxml" />
                   </Pane>
                   <Pane GridPane.columnIndex="1">
-                     <fx:include source="playerGrid.fxml" />
+                      <fx:include fx:id="playerTwo" source="playerTwoGrid.fxml" />
                   </Pane>
                   <Pane GridPane.rowIndex="1">
-                      <fx:include source="playerGrid.fxml" />
+                      <fx:include fx:id="playerThree" source="playerThreeGrid.fxml" />
                   </Pane>
                   <Pane GridPane.columnIndex="1" GridPane.rowIndex="1">
-                      <fx:include source="playerGrid.fxml" />
+                     <fx:include fx:id="playerFour" source="playerFourGrid.fxml" />
                   </Pane>
                </children>
             </GridPane>

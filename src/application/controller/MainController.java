@@ -5,13 +5,10 @@ import org.springframework.stereotype.Component;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.layout.GridPane;
 
 @Component
-public class MainController {
+public class MainController extends Controller {
 	
     @FXML
     public MenuItem addPlayerMenuItem;
@@ -20,24 +17,38 @@ public class MainController {
     public MenuItem closeMenuItem;
 
     @FXML
-    public GridPane playerGrid0;
-
+    public PlayerOneGridController playerOneController;
+    
     @FXML
-    public GridPane headerGrid0;
-
+    public PlayerTwoGridController playerTwoController;
+    
     @FXML
-    public TreeView<?> treeView0;
-
+    public PlayerThreeGridController playerThreeController;
+    
     @FXML
-    public ChoiceBox<?> choiceBox0;
-
-    @FXML
-    public GridPane bodyGrid0;
+    public PlayerFourGridController playerFourController;
     
 
     @FXML
     public void onAddPlayer(ActionEvent event)  {
     	
     }
+    
+    public PlayerOneGridController getPlayerOneController() {
+		return playerOneController;
+	}
+
+	public PlayerTwoGridController getPlayerTwoController() {
+		return playerTwoController;
+	}
+
+	public PlayerThreeGridController getPlayerThreeController() {
+		return playerThreeController;
+	}
+
+	public PlayerFourGridController getPlayerFourController() {
+		return playerFourController;
+	}
+
   
 }
