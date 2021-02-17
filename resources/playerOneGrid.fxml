@@ -2,8 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -13,44 +11,34 @@
 <?import javafx.scene.text.Text?>
 <?import java.util.ArrayList?>
 
-<GridPane fx:id="playerGrid0" onMouseEntered="#onMouseEntered" prefHeight="480.0" prefWidth="585.0" style="-fx-background-color: lightGray;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.PlayerOneGridController">
+<GridPane fx:id="playerGrid1" depthTest="ENABLE" prefHeight="480.0" prefWidth="585.0" style="-fx-background-color: lightGray;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.application.controller.PlayerOneGridController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints maxHeight="649.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="649.0" minHeight="10.0" prefHeight="431.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="649.0" minHeight="10.0" prefHeight="95.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="649.0" minHeight="10.0" prefHeight="385.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <GridPane fx:id="headerGrid0" prefHeight="55.0" prefWidth="580.0">
+      <GridPane fx:id="headerGrid1" prefHeight="54.0" prefWidth="466.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="414.0" minWidth="10.0" prefWidth="275.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="414.0" minWidth="10.0" prefWidth="150.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="88.0" minHeight="10.0" prefHeight="18.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="52.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="88.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TreeView fx:id="treeView0" prefHeight="86.0" prefWidth="280.0" GridPane.columnIndex="1" GridPane.rowSpan="2">
+            <TreeView fx:id="treeView1" prefHeight="48.0" prefWidth="237.0" GridPane.columnIndex="1" GridPane.rowSpan="2">
                <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  <Insets bottom="5.0" top="5.0" />
                </GridPane.margin>
-               <contextMenu>
-                  <ContextMenu>
-                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#onTreeInsertPlayerOne" onMenuValidation="#onTreeValidationPlayerOne" text="Insert tree" />
-                        <MenuItem mnemonicParsing="false" text="Delete tree" />
-                     </items>
-                  </ContextMenu>
-               </contextMenu>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" />
-               </padding>
             </TreeView>
-            <ChoiceBox fx:id="choiceBox0" prefHeight="37.0" prefWidth="152.0">
+            <ChoiceBox fx:id="choiceBox1" prefHeight="37.0" prefWidth="152.0">
                <GridPane.margin>
-                  <Insets left="10.0" top="5.0" />
+                  <Insets left="10.0" top="15.0" />
                </GridPane.margin>
             </ChoiceBox>
          </children>
@@ -58,7 +46,7 @@
             <Insets left="5.0" />
          </GridPane.margin>
       </GridPane>
-      <GridPane fx:id="bodyGrd0" accessibleText="ABB" gridLinesVisible="true" mouseTransparent="true" prefHeight="360.0" prefWidth="622.0" style="-fx-background-color: lightGray;" GridPane.rowIndex="1">
+      <GridPane fx:id="bodyGrd1" gridLinesVisible="true" prefHeight="360.0" prefWidth="622.0" style="-fx-background-color: lightGray;" GridPane.rowIndex="1">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -90,7 +78,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <GridPane onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" style="-fx-background-color: gray;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <GridPane depthTest="DISABLE" onMouseEntered="#onMouseEntered" onMouseExited="#onMouseExited" style="-fx-background-color: gray;" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

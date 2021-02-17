@@ -1,7 +1,13 @@
 module PioRangeAnalyzer {
-	exports application;
-	exports application.controller;
-	exports application.stage;
+	exports main.application;
+	exports main.application.controller;
+	exports main.application.stage;
+	exports main.application.cards;
+	exports main.application.fileParser;
+	exports main.application.strategy;
+	exports main.application.ui;
+	exports test.application.strategy.calculator;
+	exports main.application.strategy.calculator;
 	
 	requires java.logging;
 	requires transitive javafx.base;
@@ -12,7 +18,14 @@ module PioRangeAnalyzer {
 	requires spring.context;
 	requires spring.core;
 	requires spring.beans;
+	requires java.desktop;
+	requires junit;
+	requires spring.test;
+	requires spring.boot.test;
 	
-	opens application to spring.core;
+	opens main.application to spring.core;
+	opens main.application.strategy.calculator;
+	opens main.application.stage to spring.core;
+	opens main.application.controller to spring.core;
 
 }

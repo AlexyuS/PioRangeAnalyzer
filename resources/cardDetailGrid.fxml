@@ -9,8 +9,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import java.util.ArrayList?>
 
-<GridPane gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="186.0" prefWidth="235.0" style="-fx-background-color: #888882;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controller.CardDetailController">
+<GridPane gridLinesVisible="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="186.0" prefWidth="235.0" style="-fx-background-color: #888882;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.application.controller.CardDetailController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -45,11 +46,11 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text fx:id="suited_spades_0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+                  <Text fx:id="suited0_0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font></Text>
-                  <Text fx:id="suited_spades_1" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.columnIndex="2" GridPane.valignment="TOP">
+                  <Text fx:id="suited0_1" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.columnIndex="2" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -74,6 +75,11 @@
                   </ImageView>
                </children>
             </GridPane>
+            <Text fx:id="cardDetailsGridLabel0" strokeType="OUTSIDE" strokeWidth="0.0" text="6" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
          </children>
          <GridPane.margin>
             <Insets left="5.0" />
@@ -90,9 +96,14 @@
             <RowConstraints maxHeight="163.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Pane fx:id="cardDetailsGridEmpty01" prefHeight="300.0" prefWidth="234.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <Pane fx:id="cardDetailsGridDiff01" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-            <Pane fx:id="cardDetailsGridFill01" prefHeight="200.0" prefWidth="200.0" />
+            <Text fx:id="cardDetailsGridLabel1" strokeType="OUTSIDE" strokeWidth="0.0" text="5" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Pane fx:id="cardDetailsGridEmpty1" prefHeight="300.0" prefWidth="234.0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <Pane fx:id="cardDetailsGridDiff1" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+            <Pane fx:id="cardDetailsGridFill1" prefHeight="200.0" prefWidth="200.0" />
             <GridPane prefHeight="77.0" prefWidth="150.0" GridPane.rowSpan="3" GridPane.valignment="TOP">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="58.0" minWidth="10.0" prefWidth="39.0" />
@@ -104,12 +115,12 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Text fx:id="suited_spades_01" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+                  <Text fx:id="suited1_0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Text>
-                  <Text fx:id="suited_spades_11" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.columnIndex="2" GridPane.valignment="TOP">
+                  <Text fx:id="suited1_1" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.columnIndex="2" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -151,9 +162,9 @@
             <RowConstraints maxHeight="163.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Pane fx:id="cardDetailsGridEmpty02" prefHeight="300.0" prefWidth="234.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <Pane fx:id="cardDetailsGridDiff02" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-            <Pane fx:id="cardDetailsGridFill02" prefHeight="200.0" prefWidth="200.0" />
+            <Pane fx:id="cardDetailsGridEmpty2" prefHeight="300.0" prefWidth="234.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Pane fx:id="cardDetailsGridDiff2" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+            <Pane fx:id="cardDetailsGridFill2" prefHeight="200.0" prefWidth="200.0" />
             <GridPane prefHeight="77.0" prefWidth="150.0" GridPane.rowSpan="3" GridPane.valignment="TOP">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="58.0" minWidth="10.0" prefWidth="39.0" />
@@ -165,12 +176,12 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Text fx:id="suited_spades_02" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+                  <Text fx:id="suited2_0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Text>
-                  <Text fx:id="suited_spades_12" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.columnIndex="2" GridPane.valignment="TOP">
+                  <Text fx:id="suited2_1" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.columnIndex="2" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -199,6 +210,11 @@
                   <Insets />
                </GridPane.margin>
             </GridPane>
+            <Text fx:id="cardDetailsGridLabel2" strokeType="OUTSIDE" strokeWidth="0.0" text="5" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
          </children>
          <GridPane.margin>
             <Insets left="5.0" />
@@ -215,9 +231,9 @@
             <RowConstraints maxHeight="163.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Pane fx:id="cardDetailsGridEmpty03" prefHeight="300.0" prefWidth="234.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <Pane fx:id="cardDetailsGridDiff03" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-            <Pane fx:id="cardDetailsGridFill03" prefHeight="200.0" prefWidth="200.0" />
+            <Pane fx:id="cardDetailsGridEmpty3" prefHeight="300.0" prefWidth="234.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Pane fx:id="cardDetailsGridDiff3" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+            <Pane fx:id="cardDetailsGridFill3" prefHeight="200.0" prefWidth="200.0" />
             <GridPane prefHeight="77.0" prefWidth="150.0" GridPane.rowSpan="3" GridPane.valignment="TOP">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="58.0" minWidth="10.0" prefWidth="39.0" />
@@ -229,12 +245,12 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Text fx:id="suited_spades_03" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+                  <Text fx:id="suited3_0" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Text>
-                  <Text fx:id="suited_spades_13" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.columnIndex="2" GridPane.valignment="TOP">
+                  <Text fx:id="suited3_1" strokeType="OUTSIDE" strokeWidth="0.0" text="A" GridPane.columnIndex="2" GridPane.valignment="TOP">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
@@ -260,10 +276,57 @@
                   </ImageView>
                </children>
             </GridPane>
+            <Text fx:id="cardDetailsGridLabel3" strokeType="OUTSIDE" strokeWidth="0.0" text="5" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
          </children>
          <GridPane.margin>
             <Insets left="5.0" />
          </GridPane.margin>
       </GridPane>
    </children>
+   <fx:define>
+		<ArrayList fx:id="cardDetailsGridEmpty">
+					<fx:reference source="cardDetailsGridEmpty0" />
+				    <fx:reference source="cardDetailsGridEmpty1" />
+					<fx:reference source="cardDetailsGridEmpty2" />
+					<fx:reference source="cardDetailsGridEmpty3" />
+		</ArrayList>
+		<ArrayList fx:id="cardDetailsGridDiff">
+					<fx:reference source="cardDetailsGridDiff0" />
+				    <fx:reference source="cardDetailsGridDiff1" />
+					<fx:reference source="cardDetailsGridDiff2" />
+					<fx:reference source="cardDetailsGridDiff3" />
+		</ArrayList>
+		<ArrayList fx:id="cardDetailsGridFill">
+					<fx:reference source="cardDetailsGridFill0" />
+				    <fx:reference source="cardDetailsGridFill1" />
+					<fx:reference source="cardDetailsGridFill2" />
+					<fx:reference source="cardDetailsGridFill3" />
+		</ArrayList>
+		
+		<ArrayList fx:id="cardDetailsGridLabel">
+					<fx:reference source="cardDetailsGridLabel0" />
+				    <fx:reference source="cardDetailsGridLabel1" />
+					<fx:reference source="cardDetailsGridLabel2" />
+					<fx:reference source="cardDetailsGridLabel3" />
+		</ArrayList>
+		
+		<ArrayList fx:id="suitedHighCard">
+					<fx:reference source="suited0_0" />
+				    <fx:reference source="suited1_0" />
+					<fx:reference source="suited2_0" />
+					<fx:reference source="suited3_0" />
+		</ArrayList>
+		
+		<ArrayList fx:id="suitedLowCard">
+					<fx:reference source="suited0_1" />
+				    <fx:reference source="suited1_1" />
+					<fx:reference source="suited2_1" />
+					<fx:reference source="suited3_1" />
+		</ArrayList>
+		
+	</fx:define>
 </GridPane>
