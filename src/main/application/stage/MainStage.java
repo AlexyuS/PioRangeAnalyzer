@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import main.application.controller.GridController;
 import main.application.controller.MainController;
+import main.application.strategy.PlayerStrategyHolder;
 import main.application.ui.MenuItemAddStrategy;
 import main.application.ui.MenuItemRemoveStrategy;
 import main.application.ui.TreeObject;
@@ -81,33 +82,31 @@ public class MainStage extends SpringStage<MainController> {
 	private void initializeListView(Stage stage) {
 		{
 			GridController controller = getController().getPlayerOneController();
-			ChoiceBox<String> choiceBox = (ChoiceBox<String>) stage.getScene().lookup("#choiceBox1");
-			choiceBox.setValue("Select");
-			choiceBox.getSelectionModel().selectedIndexProperty().addListener((e,m,t)->controller.onSelectionChanged(m,t));
-		
+			ChoiceBox<PlayerStrategyHolder> choiceBox = (ChoiceBox<PlayerStrategyHolder>) stage.getScene().lookup("#choiceBox1");
+			choiceBox.setValue(new PlayerStrategyHolder("Select"));
+			choiceBox.getSelectionModel().selectedItemProperty().addListener((e,m,t)->controller.onSelectionChanged(m,t));
 		}
 
 		{
 			GridController controller = getController().getPlayerTwoController();
-			ChoiceBox<String> choiceBox = (ChoiceBox<String>) stage.getScene().lookup("#choiceBox2");
-			choiceBox.setValue("Select");
-			choiceBox.getSelectionModel().selectedIndexProperty().addListener((e,m,t)->controller.onSelectionChanged(m,t));
-		
+			ChoiceBox<PlayerStrategyHolder> choiceBox = (ChoiceBox<PlayerStrategyHolder>) stage.getScene().lookup("#choiceBox2");
+			choiceBox.setValue(new PlayerStrategyHolder("Select"));
+			choiceBox.getSelectionModel().selectedItemProperty().addListener((e,m,t)->controller.onSelectionChanged(m,t));
 		}
 
 		{
 			GridController controller = getController().getPlayerThreeController();
-			ChoiceBox<String> choiceBox = (ChoiceBox<String>) stage.getScene().lookup("#choiceBox3");
-			choiceBox.setValue("Select");
-			choiceBox.getSelectionModel().selectedIndexProperty().addListener((e,m,t)->controller.onSelectionChanged(m,t));
+			ChoiceBox<PlayerStrategyHolder> choiceBox = (ChoiceBox<PlayerStrategyHolder>) stage.getScene().lookup("#choiceBox3");
+			choiceBox.setValue(new PlayerStrategyHolder("Select"));
+			choiceBox.getSelectionModel().selectedItemProperty().addListener((e,m,t)->controller.onSelectionChanged(m,t));
 		
 		}
 
 		{
 			GridController controller = getController().getPlayerFourController();
-			ChoiceBox<String> choiceBox = (ChoiceBox<String>) stage.getScene().lookup("#choiceBox4");
-			choiceBox.setValue("Select");
-			choiceBox.getSelectionModel().selectedIndexProperty().addListener((e,m,t)->controller.onSelectionChanged(m,t));
+			ChoiceBox<PlayerStrategyHolder> choiceBox = (ChoiceBox<PlayerStrategyHolder>) stage.getScene().lookup("#choiceBox4");
+			choiceBox.setValue(new PlayerStrategyHolder("Select"));
+			choiceBox.getSelectionModel().selectedItemProperty().addListener((e,m,t)->controller.onSelectionChanged(m,t));
 		}
 	}
 }

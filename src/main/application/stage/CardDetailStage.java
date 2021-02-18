@@ -3,7 +3,7 @@ package main.application.stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import main.application.cards.SuitedBundle;
+import main.application.cards.CardStrategy;
 import main.application.controller.CardDetailController;
 import javafx.stage.Stage;
 
@@ -21,9 +21,9 @@ public class CardDetailStage extends SpringStage<CardDetailController> {
 	}
 
 	@Override
-	public void open(SuitedBundle... params) throws Exception {
+	public void open(CardStrategy... params) throws Exception {
 		super.open();
-		for(SuitedBundle param:params) {
+		for(CardStrategy param:params) {
 			getController().initializeContent(param);
 		}
 	}

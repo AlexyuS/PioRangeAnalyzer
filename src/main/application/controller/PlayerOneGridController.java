@@ -1,36 +1,38 @@
 package main.application.controller;
 
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import main.application.stage.SpringStage;
 import main.application.stage.TextAreaStage;
 import main.application.strategy.PlayerPoolStrategyHolder;
 import main.application.strategy.PlayerStrategyHolder;
+import main.application.strategy.helper.StrategyHelper;
 import main.application.ui.TreeObject;
 import main.application.ui.TreeStorage;
 import main.application.ui.helper.ChoiceSelectionHelper;
+import main.application.ui.helper.TextAreaStageHelper;
 import main.application.ui.helper.TreeViewHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-@Component
-public class PlayerOneGridController implements GridController {
+
+public class PlayerOneGridController implements GridController,InitializingBean{
 	private final static Logger LOGGER = Logger.getLogger(PlayerOneGridController.class.getName());
 
+	@Autowired
+	private MainController mainController;
+	
 	@Autowired
 	public TextAreaStage textAreaStage;
 
@@ -47,7 +49,7 @@ public class PlayerOneGridController implements GridController {
 	public TreeView<TreeObject> treeView1;
 
 	@FXML
-	public ChoiceBox<String> choiceBox1;
+	public ChoiceBox<PlayerStrategyHolder> choiceBox1;
 
 	@FXML
 	public List<Pane> cardGridEmpty1;
@@ -64,26 +66,18 @@ public class PlayerOneGridController implements GridController {
 	@FXML
 	public List<Text> handCount0;
 
-
 	@Override
 	public void onTreeInsert(ActionEvent e) {
-		PlayerStrategyHolder player = playerPool.getStrategyForPlayer(choiceBox1.getValue());
-		if (player == null) {
-			LOGGER.warning("No player found");
-			return;
-		}
-		TreeItem<TreeObject> selectedItem = treeView1.getSelectionModel().getSelectedItem();
-		textAreaStage.open(player, selectedItem);
-
+		TextAreaStageHelper.open(textAreaStage, choiceBox1, treeView1);
 	}
 
 	@Override
 	public void onTreeDelete(ActionEvent e) {
-		TreeItem<TreeObject> selectedItem = treeView1.getSelectionModel().getSelectedItem();
-		if (selectedItem.getParent() == null) {
-			return;
-		}
-		selectedItem.getParent().getChildren().remove(selectedItem);
+		PlayerStrategyHolder playerStrategyHolder= choiceBox1.getValue();
+		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(),treeView1, treeStorage);
+		
+		String id = treeView1.getSelectionModel().getSelectedItem().getValue().getId();
+		StrategyHelper.clearStrategyFromPool(playerStrategyHolder.getStrategyHolder(), id);
 	}
 
 	@FXML
@@ -93,7 +87,6 @@ public class PlayerOneGridController implements GridController {
 
 	@FXML
 	public void onMouseEntered(MouseEvent e) {
-
 		Node parentNode = e.getPickResult().getIntersectedNode().getParent();
 		Integer colIndex = GridPane.getColumnIndex(parentNode);
 		Integer rowIndex = GridPane.getRowIndex(parentNode);
@@ -106,28 +99,25 @@ public class PlayerOneGridController implements GridController {
 	}
 
 	@Override
-	public void onSelectionChanged(Number oldSelection, Number newSelection) {
-		String oldPlayerSelected = ChoiceSelectionHelper.getPlayerForIndex(choiceBox1, oldSelection);
-		if (StringUtils.isNotEmpty(oldPlayerSelected)) {
-			treeStorage.addTreeForPlayer(oldPlayerSelected, treeView1.getRoot().getChildren());
-			TreeViewHelper.clearTree(treeView1);
-		}
-
-		String newPlayerSelected = ChoiceSelectionHelper.getPlayerForIndex(choiceBox1, newSelection);
-		if (StringUtils.isEmpty(newPlayerSelected)) {
-			return;
-		}
-
-		List<TreeItem<TreeObject>> tree = treeStorage.getTreeForPlayer(newPlayerSelected);
-		if (tree != null && tree.size()>0) {
-			TreeViewHelper.addItemToRoot(treeView1, tree);
-		}
+	public void onSelectionChanged(PlayerStrategyHolder oldSelection, PlayerStrategyHolder newSelection) {
+		TreeViewHelper.handleSelectionChanged(treeStorage,treeView1, oldSelection, newSelection);
+		mainController.notify(oldSelection,newSelection,PlayerOneGridController.class);
 	}
 
 	@Override
-	public void addPlayerToChoiceList(Set<String> players) {
-		this.choiceBox1.getItems().clear();
-		this.choiceBox1.getItems().addAll(players);
+	public void addPlayerToChoiceList(PlayerStrategyHolder playerPool) {
+		ChoiceSelectionHelper.populateChoiceList(choiceBox1, playerPool);
 	}
+
+	@Override
+	public void removePlayerFromChoiceList(PlayerStrategyHolder player) {
+		ChoiceSelectionHelper.removeDirtyPlayer(choiceBox1, player);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		mainController.register(this);
+	}
+
 
 }

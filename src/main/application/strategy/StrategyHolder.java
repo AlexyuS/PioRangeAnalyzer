@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import main.application.cards.SuitedBundle;
+import main.application.cards.CardStrategy;
 
 public class StrategyHolder  {
-	public List<SuitedBundle> getIndividualCards() {
+	public List<CardStrategy> getIndividualCards() {
 		return individualCards;
 	}
 
-	public void setIndividualCards(List<SuitedBundle> individualCards) {
+	public void setIndividualCards(List<CardStrategy> individualCards) {
 		this.individualCards = individualCards;
 	}
 
@@ -19,7 +19,7 @@ public class StrategyHolder  {
 	private final String strategyName;	
 	
 
-	private List<SuitedBundle> individualCards;
+	private List<CardStrategy> individualCards;
     
 	public StrategyHolder(String strategyName) {
 		this.strategyName = strategyName;
@@ -27,7 +27,7 @@ public class StrategyHolder  {
 		this.uuid = UUID.randomUUID().toString();
 	}
 
-	public void addCards(SuitedBundle suitedBundleCard) {
+	public void addCards(CardStrategy suitedBundleCard) {
 		individualCards.add(suitedBundleCard);
 	}
 	

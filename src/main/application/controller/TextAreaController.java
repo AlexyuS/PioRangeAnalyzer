@@ -30,16 +30,16 @@ public class TextAreaController implements Controller{
 	@Autowired
 	public TextAreaStage textAreaStage;
 	
-	
+
 	@FXML
 	public void applyStrategy(ActionEvent event) {
 		FileParser parser =  new FileParser();
 		String rawStrategy = strategyTextArea.getText();
 		try {
 			List<StrategyHolder> result = parser.getStrategies(rawStrategy);
-			
 			textAreaStage.addStrategyToTree(result);
 			textAreaStage.addStrategyToPlayer(result);
+			textAreaStage.calculateNewStrategies(rawStrategy, result);
 			textAreaStage.close();
 		} catch (Exception e) {
 			LOGGER.warning("Exception occured during strategy parser: "+e.getMessage());

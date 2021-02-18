@@ -6,6 +6,7 @@ public class TreeObject {
 	
 	private final String id;
 	private final String label;
+	
 
 	public TreeObject(String label, String id) {
 		this.id = id;

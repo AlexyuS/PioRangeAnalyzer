@@ -3,7 +3,7 @@ package main.application.cards;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SuitedBundle {
+public class CardStrategy {
 
 	private final CardHand cardHand;
 
@@ -11,7 +11,7 @@ public class SuitedBundle {
 
 	private final Map<String, Double> diffFromPlayer;
 
-	public SuitedBundle(CardHand cardHand, double occurance) {
+	public CardStrategy(CardHand cardHand, double occurance) {
 		this.cardHand = cardHand;
 		this.occurance = occurance;
 		this.diffFromPlayer = new HashMap<>();
@@ -52,7 +52,7 @@ public class SuitedBundle {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SuitedBundle other = (SuitedBundle) obj;
+		CardStrategy other = (CardStrategy) obj;
 		if (cardHand == null) {
 			if (other.cardHand != null)
 				return false;

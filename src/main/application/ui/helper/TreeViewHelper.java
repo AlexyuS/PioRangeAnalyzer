@@ -3,9 +3,10 @@ package main.application.ui.helper;
 import java.io.File;
 import java.util.List;
 
-
+import main.application.strategy.PlayerStrategyHolder;
 import main.application.strategy.StrategyHolder;
 import main.application.ui.TreeObject;
+import main.application.ui.TreeStorage;
 import main.application.ui.events.TreeItemClickedEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
@@ -36,6 +37,22 @@ public class TreeViewHelper {
 		return treeItem;
 	}
 	
+	public static final void handleSelectionChanged(TreeStorage treeStorage,TreeView<TreeObject> treeView, PlayerStrategyHolder oldPlayerSelected,
+			PlayerStrategyHolder newPlayerSelected) {
+	
+		if (oldPlayerSelected != null) {
+			treeStorage.addTreeForPlayer(oldPlayerSelected.getPlayerName(), treeView.getRoot().getChildren());
+			clearTree(treeView);
+		}
+
+		if (newPlayerSelected != null) {
+			List<TreeItem<TreeObject>> tree = treeStorage.getTreeForPlayer(newPlayerSelected.getPlayerName());
+			if (tree != null && tree.size() > 0) {
+				addItemToRoot(treeView, tree);
+			}
+		}
+	}
+	
 	public static Node createTreeExpandedIcon() {	
 		return new ImageView(new Image(new File("resources/arrow_down_16x16.png").toURI().toString()));
 	}
@@ -60,5 +77,18 @@ public class TreeViewHelper {
 	
 	public static final void addItemToRoot(TreeView<TreeObject>treeView,List<TreeItem<TreeObject>>childrens) {
 		treeView.getRoot().getChildren().addAll(childrens);
+	}
+	
+	public static final void removeNode(String player,TreeView<TreeObject>treeView,TreeStorage treeStorage) {
+		TreeItem<TreeObject> selectedItem = treeView.getSelectionModel().getSelectedItem();
+		if (selectedItem.getParent() == null) {
+			return;
+		}
+		selectedItem.getParent().getChildren().remove(selectedItem);
+		
+		if(treeStorage.getTreeForPlayer(player).contains(selectedItem)) {
+			treeStorage.getTreeForPlayer(player).remove(selectedItem);
+		}
+		
 	}
 }

@@ -10,46 +10,46 @@ import org.springframework.util.Assert;
 import main.application.cards.Card;
 import main.application.cards.CardColor;
 import main.application.cards.CardHand;
-import main.application.cards.SuitedBundle;
+import main.application.cards.CardStrategy;
 import main.application.strategy.calculator.StrategyDiffCalculator;
 
 public class StrategyCalculatorTest {
 
-	private List<SuitedBundle> sb1;
-	private List<SuitedBundle> sb2;
+	private List<CardStrategy> sb1;
+	private List<CardStrategy> sb2;
 
 	private String player1 = "Jhon";
 	private String player2 = "Mike";
 
-	private SuitedBundle AcAd1;
-	private SuitedBundle KcKd1;
-	private SuitedBundle QcQd1;
-	private SuitedBundle JcJd;
+	private CardStrategy AcAd1;
+	private CardStrategy KcKd1;
+	private CardStrategy QcQd1;
+	private CardStrategy JcJd;
 
-	private SuitedBundle AcAd2;
-	private SuitedBundle KcKd2;
-	private SuitedBundle QcQd2;
-	private SuitedBundle TcTd;
+	private CardStrategy AcAd2;
+	private CardStrategy KcKd2;
+	private CardStrategy QcQd2;
+	private CardStrategy TcTd;
 
 	@Before
 	public void before() {
 		sb1 = new ArrayList<>();
 		sb2 = new ArrayList<>();
 
-		AcAd1 = new SuitedBundle(new CardHand(Card.ACE, CardColor.CLUBS, Card.ACE, CardColor.DIAMONDS), (double) 20);
-		KcKd1 = new SuitedBundle(new CardHand(Card.KING, CardColor.CLUBS, Card.KING, CardColor.DIAMONDS), (double) 20);
-		QcQd1 = new SuitedBundle(new CardHand(Card.KING, CardColor.CLUBS, Card.KING, CardColor.DIAMONDS), (double) 20);
-		JcJd = new SuitedBundle(new CardHand(Card.JACK, CardColor.CLUBS, Card.JACK, CardColor.DIAMONDS), (double) 20);
+		AcAd1 = new CardStrategy(new CardHand(Card.ACE, CardColor.CLUBS, Card.ACE, CardColor.DIAMONDS), (double) 20);
+		KcKd1 = new CardStrategy(new CardHand(Card.KING, CardColor.CLUBS, Card.KING, CardColor.DIAMONDS), (double) 20);
+		QcQd1 = new CardStrategy(new CardHand(Card.KING, CardColor.CLUBS, Card.KING, CardColor.DIAMONDS), (double) 20);
+		JcJd = new CardStrategy(new CardHand(Card.JACK, CardColor.CLUBS, Card.JACK, CardColor.DIAMONDS), (double) 20);
 		sb1.add(AcAd1);
 		sb1.add(KcKd1);
 		sb1.add(QcQd1);
 		sb1.add(JcJd);
 
-		AcAd2 = new SuitedBundle(new CardHand(Card.ACE, CardColor.CLUBS, Card.ACE, CardColor.DIAMONDS), (double) 10);
-		KcKd2 = new SuitedBundle(new CardHand(Card.KING, CardColor.CLUBS, Card.KING, CardColor.DIAMONDS), (double) 20);
-		QcQd2 = new SuitedBundle(new CardHand(Card.QUEEN, CardColor.CLUBS, Card.QUEEN, CardColor.DIAMONDS),
+		AcAd2 = new CardStrategy(new CardHand(Card.ACE, CardColor.CLUBS, Card.ACE, CardColor.DIAMONDS), (double) 10);
+		KcKd2 = new CardStrategy(new CardHand(Card.KING, CardColor.CLUBS, Card.KING, CardColor.DIAMONDS), (double) 20);
+		QcQd2 = new CardStrategy(new CardHand(Card.QUEEN, CardColor.CLUBS, Card.QUEEN, CardColor.DIAMONDS),
 				(double) 40);
-		TcTd = new SuitedBundle(new CardHand(Card.TEN, CardColor.CLUBS, Card.TEN, CardColor.DIAMONDS), (double) 20);
+		TcTd = new CardStrategy(new CardHand(Card.TEN, CardColor.CLUBS, Card.TEN, CardColor.DIAMONDS), (double) 20);
 
 		sb2.add(AcAd2);
 		sb2.add(KcKd2);

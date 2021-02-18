@@ -9,12 +9,14 @@ public class CardHand {
 	private final Card lowCard;
 	private final CardColor lowCardColor;
 	
+	private final boolean isSuited;
 
 	public CardHand(Card highCard, CardColor highCardColor, Card lowCard, CardColor lowCardColor) {
 		this.highCard = highCard;
 		this.highCardColor = highCardColor;
 		this.lowCard = lowCard;
 		this.lowCardColor = lowCardColor;
+		this.isSuited = lowCardColor.equals(highCardColor);
 	}
 
 	public Card getHighCard() {
@@ -33,6 +35,9 @@ public class CardHand {
 		return lowCardColor;
 	}
 
+	public boolean isSuited() {
+		return isSuited;
+	}
 	@Override
 	public String toString() {
 		return "CardHand [highCard=" + highCard + ", highCardColor=" + highCardColor + ", lowCard=" + lowCard

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class PlayerPoolStrategyHolder {
 	private Map<String,PlayerStrategyHolder> playerPool;
@@ -20,7 +21,7 @@ public class PlayerPoolStrategyHolder {
 	}
 	
 	public void putNewPlayerStrategy(String player) {
-		this.playerPool.put(player, new PlayerStrategyHolder());
+		this.playerPool.put(player, new PlayerStrategyHolder(player));
 	}
 	
 	public Set<String> getAllPlayers(){

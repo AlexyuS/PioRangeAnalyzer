@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import main.application.cards.Card;
 import main.application.cards.CardHand;
 import main.application.cards.CardColor;
-import main.application.cards.SuitedBundle;
+import main.application.cards.CardStrategy;
 import main.application.strategy.StrategyHolder;
 
 @Component
@@ -60,13 +60,13 @@ public class FileParser {
 		Integer index = 1;
 		
 		while (strategiesIterator.hasNext()) {
-			SuitedBundle suitedBundle = wrapInSuitedBundle(cards,rawStrategyLine[index]);
+			CardStrategy suitedBundle = wrapInSuitedBundle(cards,rawStrategyLine[index]);
 			strategiesIterator.next().addCards(suitedBundle);
 		}
 
 	}
 
-	public CardHand convertoToCardHand(String rawHand) throws Exception {
+	private CardHand convertoToCardHand(String rawHand) throws Exception {
 		char[] cards = rawHand.trim().toCharArray();
 
 		if (cards.length != 4) {
@@ -83,8 +83,8 @@ public class FileParser {
 
 	}
 	
-	public SuitedBundle wrapInSuitedBundle(CardHand card,String occurance) {
-		return new SuitedBundle(card, Double.parseDouble(occurance));
+	private CardStrategy wrapInSuitedBundle(CardHand card,String occurance) {
+		return new CardStrategy(card, Double.parseDouble(occurance));
 	}
 	
 	

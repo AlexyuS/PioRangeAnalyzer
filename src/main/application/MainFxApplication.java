@@ -10,6 +10,7 @@ public class MainFxApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try{
+			@SuppressWarnings("resource")
 			AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 			ConfigurableListableBeanFactory beanFactory = ctx.getBeanFactory();
 			beanFactory.registerSingleton("primaryStage", primaryStage);

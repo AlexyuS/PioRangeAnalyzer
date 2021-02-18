@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import main.application.controller.TextAreaController;
+import main.application.exception.MismatchStrategyException;
 import main.application.strategy.PlayerStrategyHolder;
 import main.application.strategy.StrategyHolder;
+import main.application.strategy.calculator.StrategyDiffCalculator;
 import main.application.ui.TreeObject;
 import main.application.ui.helper.TreeViewHelper;
 import javafx.scene.control.TreeItem;
@@ -20,8 +22,11 @@ public class TextAreaStage extends SpringStage<TextAreaController>{
     private PlayerStrategyHolder playerStrategyHolder;
     private TreeItem<TreeObject> treeItem;
     
+    @Autowired
+    private StrategyDiffCalculator calculator;
+    
 	@Autowired
-	public TextAreaStage(String path) {
+	public TextAreaStage(String path,StrategyDiffCalculator calculator) {
 		super(path);
 	}
 
@@ -50,8 +55,8 @@ public class TextAreaStage extends SpringStage<TextAreaController>{
 		playerStrategyHolder.getStrategyHolder().addAll(strategies);	
 	}
 
-	public void calculateStrategiesForPlayer(String name,List<StrategyHolder> strategiesHolder) {
-	
+	public void calculateNewStrategies(String name,List<StrategyHolder> strategiesHolder) throws  MismatchStrategyException {
+		calculator.calculateDiffStrategyForPlayer(name, strategiesHolder);
 	}
 	
 	@Override

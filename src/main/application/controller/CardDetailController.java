@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import main.application.cards.CardHand;
-import main.application.cards.SuitedBundle;
+import main.application.cards.CardStrategy;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -32,7 +32,7 @@ public class CardDetailController implements Controller{
 	@FXML
 	public List<Text> suitedLowCard;
 	
-	public void initializeContent(SuitedBundle bundle)throws Exception {
+	public void initializeContent(CardStrategy bundle)throws Exception {
 		CardHand cardHand = bundle.getCardHand();
 		int index = getIndexForCard(cardHand);
 		

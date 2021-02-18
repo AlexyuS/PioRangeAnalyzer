@@ -22,6 +22,7 @@ module PioRangeAnalyzer {
 	requires junit;
 	requires spring.test;
 	requires spring.boot.test;
+	requires java.annotation;
 	
 	opens main.application to spring.core;
 	opens main.application.strategy.calculator;

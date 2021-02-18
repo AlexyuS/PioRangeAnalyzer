@@ -1,40 +1,39 @@
 package main.application.controller;
 
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import main.application.stage.SpringStage;
 import main.application.stage.TextAreaStage;
 import main.application.strategy.PlayerPoolStrategyHolder;
 import main.application.strategy.PlayerStrategyHolder;
+import main.application.strategy.helper.StrategyHelper;
 import main.application.ui.TreeObject;
 import main.application.ui.TreeStorage;
 import main.application.ui.helper.ChoiceSelectionHelper;
+import main.application.ui.helper.TextAreaStageHelper;
 import main.application.ui.helper.TreeViewHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-@Component
-public class PlayerTwoGridController implements GridController {
-	// private static final String RED_BACKGROUND = "-fx-background-color:
-	// #DE1B1B;";
-	// private static final String YELLOW_BACKGROUND = "-fx-background-color:
-	// #F9EF1B;";
+
+public class PlayerTwoGridController implements GridController,InitializingBean {
+	@SuppressWarnings("unused")
 	private final static Logger LOGGER = Logger.getLogger(PlayerTwoGridController.class.getName());
 
 	@Autowired
+	public MainController mainController;
+
+	@Autowired
 	public TreeStorage treeStorage;
-	
+
 	@Autowired
 	public TextAreaStage textAreaStage;
 
@@ -48,7 +47,7 @@ public class PlayerTwoGridController implements GridController {
 	public TreeView<TreeObject> treeView2;
 
 	@FXML
-	public ChoiceBox<String> choiceBox2;
+	public ChoiceBox<PlayerStrategyHolder> choiceBox2;
 
 	@FXML
 	public List<Pane> cardGridEmpty2;
@@ -64,52 +63,41 @@ public class PlayerTwoGridController implements GridController {
 
 	@FXML
 	public List<Text> handCount2;
-
-
+	
 	@Override
 	public void onTreeInsert(ActionEvent e) {
-		PlayerStrategyHolder player = playerPool.getStrategyForPlayer(choiceBox2.getValue());
-		if (player == null) {
-			LOGGER.warning("No player found");
-			return;
-		}
-		TreeItem<TreeObject> selectedItem = treeView2.getSelectionModel().getSelectedItem();
-		textAreaStage.open(player, selectedItem);
+		TextAreaStageHelper.open(textAreaStage, choiceBox2, treeView2);
 	}
 
 	@Override
 	public void onTreeDelete(ActionEvent e) {
-		TreeItem<TreeObject> selectedItem = treeView2.getSelectionModel().getSelectedItem();
-		if (selectedItem.getParent() == null) {
-			return;
-		}
-		selectedItem.getParent().getChildren().remove(selectedItem);
-	}
-
-	@Override
-	public void onSelectionChanged(Number oldSelection, Number newSelection) {
-		String oldPlayerSelected = ChoiceSelectionHelper.getPlayerForIndex(choiceBox2, oldSelection);
-		if (StringUtils.isNotEmpty(oldPlayerSelected)) {
-			treeStorage.addTreeForPlayer(oldPlayerSelected, treeView2.getRoot().getChildren());
-			TreeViewHelper.clearTree(treeView2);
-		}
-
-		String newPlayerSelected = ChoiceSelectionHelper.getPlayerForIndex(choiceBox2, newSelection);
-		if (StringUtils.isEmpty(newPlayerSelected)) {
-			return;
-		}
-
-		List<TreeItem<TreeObject>> tree = treeStorage.getTreeForPlayer(newPlayerSelected);
-		if (tree != null && tree.size()>0) {
-			TreeViewHelper.addItemToRoot(treeView2, tree);
-		}
+		PlayerStrategyHolder playerStrategyHolder= choiceBox2.getValue();
+		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(),treeView2, treeStorage);
 		
+		String id = treeView2.getSelectionModel().getSelectedItem().getValue().getId();
+		StrategyHelper.clearStrategyFromPool(playerStrategyHolder.getStrategyHolder(), id);
 	}
 
 	@Override
-	public void addPlayerToChoiceList(Set<String> players) {
-		this.choiceBox2.getItems().clear();
-		this.choiceBox2.getItems().addAll(players);
+	public void onSelectionChanged(PlayerStrategyHolder oldSelection, PlayerStrategyHolder newSelection) {
+		TreeViewHelper.handleSelectionChanged(treeStorage, treeView2, oldSelection, newSelection);
+		mainController.notify(oldSelection,newSelection,PlayerTwoGridController.class);
 	}
+
+	@Override
+	public void addPlayerToChoiceList(PlayerStrategyHolder player) {
+		ChoiceSelectionHelper.populateChoiceList(choiceBox2, player);
+	}
+
+	@Override
+	public void removePlayerFromChoiceList(PlayerStrategyHolder player) {
+		ChoiceSelectionHelper.removeDirtyPlayer(choiceBox2, player);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		mainController.register(this);
+	}
+
 
 }
