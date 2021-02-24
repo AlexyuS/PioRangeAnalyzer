@@ -14,6 +14,7 @@ public class PlayerPoolStrategyHolder {
 	
 	public PlayerPoolStrategyHolder() {
 		this.playerPool = new HashMap<>();
+		this.playerPool.put("ROOT", new PlayerStrategyHolder("Select"));
 	}
 	
 	public PlayerStrategyHolder getStrategyForPlayer (String player) {
@@ -28,7 +29,7 @@ public class PlayerPoolStrategyHolder {
 		return playerPool.keySet();
 	}
 	
-	public Collection<PlayerStrategyHolder> gettAllStrategies(){
+	public Collection<PlayerStrategyHolder> getAllStrategies(){
 		return playerPool.values();
 	}
 }

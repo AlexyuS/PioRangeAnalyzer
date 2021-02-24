@@ -3,7 +3,7 @@ package main.application.stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import main.application.cards.CardStrategy;
+import main.application.cards.IndividualCardStrategy;
 import main.application.controller.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -43,7 +43,7 @@ public abstract class SpringStage<E extends Controller> {
 		stage.show();
 	}
 	
-	public void open(CardStrategy ... params) throws Exception {
+	public void open(IndividualCardStrategy ... params) throws Exception {
 		stage.show();
 	}
 	

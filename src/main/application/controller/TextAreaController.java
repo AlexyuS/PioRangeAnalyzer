@@ -39,7 +39,6 @@ public class TextAreaController implements Controller{
 			List<StrategyHolder> result = parser.getStrategies(rawStrategy);
 			textAreaStage.addStrategyToTree(result);
 			textAreaStage.addStrategyToPlayer(result);
-			textAreaStage.calculateNewStrategies(rawStrategy, result);
 			textAreaStage.close();
 		} catch (Exception e) {
 			LOGGER.warning("Exception occured during strategy parser: "+e.getMessage());

@@ -8,25 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import main.application.controller.TextAreaController;
-import main.application.exception.MismatchStrategyException;
 import main.application.strategy.PlayerStrategyHolder;
 import main.application.strategy.StrategyHolder;
-import main.application.strategy.calculator.StrategyDiffCalculator;
-import main.application.ui.TreeObject;
 import main.application.ui.helper.TreeViewHelper;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 @Component
 public class TextAreaStage extends SpringStage<TextAreaController>{
-    private PlayerStrategyHolder playerStrategyHolder;
-    private TreeItem<TreeObject> treeItem;
     
-    @Autowired
-    private StrategyDiffCalculator calculator;
+    private PlayerStrategyHolder playerStrategyHolder;
+    
+    private TreeItem<StrategyHolder> treeItem;
+    
     
 	@Autowired
-	public TextAreaStage(String path,StrategyDiffCalculator calculator) {
+	public TextAreaStage(String path) {
 		super(path);
 	}
 
@@ -36,10 +33,10 @@ public class TextAreaStage extends SpringStage<TextAreaController>{
 	}
 	
 	
-	public void open(PlayerStrategyHolder strategyHolder,TreeItem<TreeObject> treeItem) {
+	public void open(TreeItem<StrategyHolder> treeItem,PlayerStrategyHolder playerName) {
 		super.open();
-		this.playerStrategyHolder = strategyHolder;
 		this.treeItem = treeItem;
+		this.playerStrategyHolder = playerName;
 	}
 
 	@Override
@@ -52,13 +49,13 @@ public class TextAreaStage extends SpringStage<TextAreaController>{
 	}
 	
 	public void addStrategyToPlayer(List<StrategyHolder> strategies) {
-		playerStrategyHolder.getStrategyHolder().addAll(strategies);	
+		if(playerStrategyHolder.getStrategyHolder().size()==0) {
+			playerStrategyHolder.setStrategyHolder(strategies);
+		}else {
+			treeItem.getValue().addChilds(strategies);
+		}
 	}
 
-	public void calculateNewStrategies(String name,List<StrategyHolder> strategiesHolder) throws  MismatchStrategyException {
-		calculator.calculateDiffStrategyForPlayer(name, strategiesHolder);
-	}
-	
 	@Override
 	protected void refreshUI(Stage stage) {
 		

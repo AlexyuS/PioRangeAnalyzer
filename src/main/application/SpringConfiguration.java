@@ -18,7 +18,6 @@ import main.application.stage.CardDetailStage;
 import main.application.stage.MainStage;
 import main.application.stage.SpringStage;
 import main.application.stage.TextAreaStage;
-import main.application.strategy.calculator.StrategyDiffCalculator;
 import javafx.stage.Stage;
 
 @Configuration
@@ -27,9 +26,6 @@ public class SpringConfiguration {
 
 	@Autowired
 	public Stage stage;
-
-	@Autowired
-	public StrategyDiffCalculator strategyDiff;
 	
 	@Autowired
 	public MainController mainController;
@@ -51,7 +47,7 @@ public class SpringConfiguration {
 
 	@Bean
 	public TextAreaStage textAreaStage() throws IOException{
-		TextAreaStage textAreaStage = new TextAreaStage("resources/textAreaStrategy.fxml",strategyDiff);
+		TextAreaStage textAreaStage = new TextAreaStage("resources/textAreaStrategy.fxml");
 		textAreaStage.initialize();
 		return textAreaStage;
 	}

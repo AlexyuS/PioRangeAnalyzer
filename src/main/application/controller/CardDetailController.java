@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import main.application.cards.CardHand;
-import main.application.cards.CardStrategy;
+import main.application.cards.IndividualCardStrategy;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -32,22 +32,10 @@ public class CardDetailController implements Controller{
 	@FXML
 	public List<Text> suitedLowCard;
 	
-	public void initializeContent(CardStrategy bundle)throws Exception {
-		CardHand cardHand = bundle.getCardHand();
-		int index = getIndexForCard(cardHand);
+	public void initializeContent(IndividualCardStrategy bundle)throws Exception {
 		
-		cardDetailsGridDiff.get(index).setStyle(RED_BACKGROUND);
-		cardDetailsGridFill.get(index).setStyle(YELLOW_BACKGROUND);
-		cardDetailsGridLabel.get(index).setText(bundle.getOccurance()+"");
-		suitedHighCard.get(index).setText(cardHand.getHighCard().getCardAsString());
-		suitedLowCard.get(index).setText(cardHand.getLowCard().getCardAsString());
 	}
 	
-	private int getIndexForCard(CardHand cardHand) throws Exception{
-		if(cardHand.getHighCardColor()==cardHand.getLowCardColor()) {
-			throw new Exception("Offsuited hands are not allowed here");
-		}
-		return cardHand.getHighCardColor().getCardRank();
-	}
+	
 	
 }

@@ -1,16 +1,18 @@
 package main.application.cards;
 
 public enum Card {
-	ACE(14), KING(13), QUEEN(12), JACK(11), TEN(10), NINE(9), EIGHT(8), SEVEN(7), SIX(6), FIVE(5), FOUR(4), THREE(3),
-	TWO(2);
+	ACE(14,"A"), KING(13,"K"), QUEEN(12,"Q"), JACK(11,"J"), TEN(10,"T"), NINE(9,"9"), EIGHT(8,"8"), SEVEN(7,"7"), SIX(6,"6"), FIVE(5,"5"), FOUR(4,"4"), THREE(3,"3"),
+	TWO(2,"2");
 
-	private Integer cardRank;
+	private int cardRank;
+	private String label;
 
-	Card(Integer string) {
+	Card(Integer string,String label) {
 		this.cardRank = string;
+		this.label = label;
 	}
 
-	public Integer getCardRank() {
+	public int getCardRank() {
 		return cardRank;
 	}
 
@@ -47,47 +49,8 @@ public enum Card {
 		}
 	}
 
-	public String getCardAsString() {
-		switch (cardRank) {
-		case 2:
-			return "2";
-		case 3:
-			return "3";
-		case 4:
-			return "4";
-
-		case 5:
-			return "5";
-
-		case 6:
-			return "6";
-
-		case 7:
-			return "7";
-
-		case 8:
-			return "8";
-
-		case 9:
-			return "9";
-
-		case 10:
-			return "T";
-
-		case 11:
-			return "J";
-
-		case 12:
-			return "Q";
-
-		case 13:
-			return "K";
-
-		case 14:
-			return "A";
-
-		default:
-			throw new IllegalArgumentException("Unknown card found");
-		}
+	
+	public String getLabel() {
+		return this.label;
 	}
 }

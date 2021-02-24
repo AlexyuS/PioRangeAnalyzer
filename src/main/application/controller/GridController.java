@@ -17,5 +17,5 @@ public interface GridController extends Controller {
 	
 	public void removePlayerFromChoiceList(PlayerStrategyHolder player);
 	
-	
+	public void triggerRecalculation();
 }

@@ -40,8 +40,7 @@ public class CardHand {
 	}
 	@Override
 	public String toString() {
-		return "CardHand [highCard=" + highCard + ", highCardColor=" + highCardColor + ", lowCard=" + lowCard
-				+ ", lowCardColor=" + lowCardColor + "]";
+		return this.highCard.getLabel()+this.highCardColor.getLabel()+this.lowCard.getLabel()+this.lowCardColor.getLabel();
 	}
 
 	@Override
@@ -64,13 +63,13 @@ public class CardHand {
 		if (getClass() != obj.getClass())
 			return false;
 		CardHand other = (CardHand) obj;
-		if (highCard != other.highCard)
+		if (!highCard.equals(other.highCard))
 			return false;
-		if (highCardColor != other.highCardColor)
+		if (!highCardColor.equals(other.highCardColor))
 			return false;
-		if (lowCard != other.lowCard)
+		if (!lowCard.equals(other.lowCard))
 			return false;
-		if (lowCardColor != other.lowCardColor)
+		if (!lowCardColor.equals(other.lowCardColor))
 			return false;
 		return true;
 	}

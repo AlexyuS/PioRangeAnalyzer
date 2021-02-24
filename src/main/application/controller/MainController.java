@@ -11,17 +11,21 @@ import org.springframework.stereotype.Component;
 import main.application.observer.SelectionChangedObserver;
 import main.application.strategy.PlayerPoolStrategyHolder;
 import main.application.strategy.PlayerStrategyHolder;
+import main.application.strategy.StrategyHolder;
+import main.application.strategy.calculator.StrategyDiffCalculator;
 import main.application.ui.PlayerInsertDialog;
+import main.application.ui.helper.GridHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.GridPane;
 
 @Component
 public class MainController implements Controller, SelectionChangedObserver {
 
 	@Autowired
 	private PlayerPoolStrategyHolder playerPool;
-
+	
 	@FXML
 	public MenuItem addPlayerMenuItem;
 
@@ -64,8 +68,8 @@ public class MainController implements Controller, SelectionChangedObserver {
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()) {
 			playerPool.putNewPlayerStrategy(result.get());
-		}
-		insertNewPlayer(playerPool.getStrategyForPlayer(result.get()));
+			insertNewPlayer(playerPool.getStrategyForPlayer(result.get()));
+		}	
 	}
 
 	public void insertNewPlayer(PlayerStrategyHolder playerPool) {
@@ -83,14 +87,18 @@ public class MainController implements Controller, SelectionChangedObserver {
 		controllerList.add(controller);
 	}
 
-	@Override
-	public void notify(PlayerStrategyHolder oldStrategy, PlayerStrategyHolder newStrategy, Class<?> excludeControler) {
-		controllerList.forEach(e -> {
-			if (!e.getClass().equals(excludeControler)) {
-				e.addPlayerToChoiceList(oldStrategy);
-				e.removePlayerFromChoiceList(newStrategy);
-			}
-		});
+	public void triggerStrategyCalculation(StrategyHolder strategyHolder,GridPane parentGrid) {
+		StrategyHolder strategy = playerOneController.getRefStrategyFromFirstView();
+		
+		StrategyDiffCalculator strategyDifCalculator =  new StrategyDiffCalculator(strategy);
+		strategyDifCalculator.calculateIndividualStrategies(strategyHolder);
+		
+		GridHelper gridhelper =  new GridHelper();
+		gridhelper.fillGridForStrategy(strategyHolder, parentGrid);
+		
 	}
 	
+	public void notifyRecalculationRequired() {
+		controllerList.forEach(e->e.triggerRecalculation());
+	}
 }

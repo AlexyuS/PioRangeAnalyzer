@@ -22,9 +22,12 @@ public class ChoiceSelectionHelper {
 
 	public static final void populateChoiceList(ChoiceBox<PlayerStrategyHolder> choiceBox,
 			PlayerStrategyHolder player) {
-		if (player.getStrategyHolder() == null) {
+		
+		boolean anyMatch = choiceBox.getItems().stream().anyMatch(e->e.equals(player));
+		if (anyMatch) {
 			return;
 		}
+
 		choiceBox.getItems().add(player);
 	}
 
@@ -32,7 +35,8 @@ public class ChoiceSelectionHelper {
 		if (player == null) {
 			return;
 		}
-		if (choiceBox.getValue().getPlayerName().equals(player.getPlayerName())) {
+		
+		if(player.getPlayerName().equals("Select")){
 			return;
 		}
 

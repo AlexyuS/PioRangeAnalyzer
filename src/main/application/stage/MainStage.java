@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import main.application.controller.GridController;
 import main.application.controller.MainController;
 import main.application.strategy.PlayerStrategyHolder;
+import main.application.strategy.StrategyHolder;
 import main.application.ui.MenuItemAddStrategy;
 import main.application.ui.MenuItemRemoveStrategy;
-import main.application.ui.TreeObject;
 import main.application.ui.helper.TreeViewHelper;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ContextMenu;
@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 @Component
 public class MainStage extends SpringStage<MainController> {
-
+	
 	@Autowired
 	public MainStage(String path, Stage stage) {
 		super(path, stage);
@@ -30,7 +30,7 @@ public class MainStage extends SpringStage<MainController> {
 
 		{
 			GridController controller = getController().getPlayerOneController();
-			TreeView<TreeObject> treeView = (TreeView<TreeObject>) stage.getScene().lookup("#treeView1");
+			TreeView<StrategyHolder> treeView = (TreeView<StrategyHolder>) stage.getScene().lookup("#treeView1");
 			treeView.setContextMenu(
 					new ContextMenu(new MenuItemAddStrategy(controller), new MenuItemRemoveStrategy(controller)));
 			addRootNodeForTree(treeView);
@@ -38,7 +38,7 @@ public class MainStage extends SpringStage<MainController> {
 
 		{
 			GridController controller = getController().getPlayerTwoController();
-			TreeView<TreeObject> treeView = (TreeView<TreeObject>) stage.getScene().lookup("#treeView2");
+			TreeView<StrategyHolder> treeView = (TreeView<StrategyHolder>) stage.getScene().lookup("#treeView2");
 			treeView.setContextMenu(
 					new ContextMenu(new MenuItemAddStrategy(controller), new MenuItemRemoveStrategy(controller)));
 			addRootNodeForTree(treeView);
@@ -46,14 +46,14 @@ public class MainStage extends SpringStage<MainController> {
 
 		{
 			GridController controller = getController().getPlayerThreeController();
-			TreeView<TreeObject> treeView = (TreeView<TreeObject>) stage.getScene().lookup("#treeView3");
+			TreeView<StrategyHolder> treeView = (TreeView<StrategyHolder>) stage.getScene().lookup("#treeView3");
 			treeView.setContextMenu(
 					new ContextMenu(new MenuItemAddStrategy(controller), new MenuItemRemoveStrategy(controller)));
 			addRootNodeForTree(treeView);
 		}
 		{
 			GridController controller = getController().getPlayerFourController();
-			TreeView<TreeObject> treeView = (TreeView<TreeObject>) stage.getScene().lookup("#treeView4");
+			TreeView<StrategyHolder> treeView = (TreeView<StrategyHolder>) stage.getScene().lookup("#treeView4");
 			treeView.setContextMenu(
 					new ContextMenu(new MenuItemAddStrategy(controller), new MenuItemRemoveStrategy(controller)));
 			addRootNodeForTree(treeView);
@@ -65,12 +65,11 @@ public class MainStage extends SpringStage<MainController> {
 
 	@Override
 	protected void onClose(Stage stage) {
-		// TODO Auto-generated method stub
 
 	}
 
-	private void addRootNodeForTree(TreeView<TreeObject> treeView) {
-		TreeItem<TreeObject> rootNode = TreeViewHelper.createRootNode();
+	private void addRootNodeForTree(TreeView<StrategyHolder> treeView) {
+		TreeItem<StrategyHolder> rootNode = TreeViewHelper.createRootNode();
 		treeView.setRoot(rootNode);
 	}
 

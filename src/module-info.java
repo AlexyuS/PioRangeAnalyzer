@@ -6,8 +6,8 @@ module PioRangeAnalyzer {
 	exports main.application.fileParser;
 	exports main.application.strategy;
 	exports main.application.ui;
-	exports test.application.strategy.calculator;
 	exports main.application.strategy.calculator;
+	exports test;
 	
 	requires java.logging;
 	requires transitive javafx.base;
@@ -19,10 +19,8 @@ module PioRangeAnalyzer {
 	requires spring.core;
 	requires spring.beans;
 	requires java.desktop;
-	requires junit;
-	requires spring.test;
-	requires spring.boot.test;
 	requires java.annotation;
+	requires junit;
 	
 	opens main.application to spring.core;
 	opens main.application.strategy.calculator;

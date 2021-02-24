@@ -1,6 +1,5 @@
 package main.application.controller;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -10,9 +9,7 @@ import main.application.stage.SpringStage;
 import main.application.stage.TextAreaStage;
 import main.application.strategy.PlayerPoolStrategyHolder;
 import main.application.strategy.PlayerStrategyHolder;
-import main.application.strategy.helper.StrategyHelper;
-import main.application.ui.TreeObject;
-import main.application.ui.TreeStorage;
+import main.application.strategy.StrategyHolder;
 import main.application.ui.helper.ChoiceSelectionHelper;
 import main.application.ui.helper.TextAreaStageHelper;
 import main.application.ui.helper.TreeViewHelper;
@@ -20,8 +17,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 
 public class PlayerThreeGridController implements GridController,InitializingBean {
 	@SuppressWarnings("unused")
@@ -29,9 +27,6 @@ public class PlayerThreeGridController implements GridController,InitializingBea
 
 	@Autowired
 	public MainController mainController;
-
-	@Autowired
-	public TreeStorage treeStorage;
 
 	@Autowired
 	public TextAreaStage textAreaStage;
@@ -43,26 +38,33 @@ public class PlayerThreeGridController implements GridController,InitializingBea
 	public PlayerPoolStrategyHolder playerPool;
 
 	@FXML
-	public TreeView<TreeObject> treeView3;
+	public TreeView<StrategyHolder> treeView3;
 
 	@FXML
 	public ChoiceBox<PlayerStrategyHolder> choiceBox3;
 
 	@FXML
-	public List<Pane> cardGridEmpty3;
-
+	public GridPane cardGrid3;
+	
 	@FXML
-	public List<Pane> cardGridDiff3;
-
-	@FXML
-	public List<Pane> cardGridFill3;
-
-	@FXML
-	public List<Text> handLabel3;
-
-	@FXML
-	public List<Text> handCount3;
-
+	public void onTreeMouseClicked(MouseEvent e){
+		if(e.getButton().compareTo(MouseButton.SECONDARY)==0) {
+			return;
+		}
+		sendRecalculationEventToMainControler();
+	}
+	
+	private void sendRecalculationEventToMainControler() {
+		if(treeView3.getSelectionModel().getSelectedItem()==null){
+			return;
+		}
+		
+		StrategyHolder strategy = treeView3.getSelectionModel().getSelectedItem().getValue();
+		mainController.triggerStrategyCalculation(strategy, cardGrid3);
+	}
+	
+	
+	
 	
 	@Override
 	public void onTreeInsert(ActionEvent e) {
@@ -72,17 +74,12 @@ public class PlayerThreeGridController implements GridController,InitializingBea
 	@Override
 	public void onTreeDelete(ActionEvent e) {
 		PlayerStrategyHolder playerStrategyHolder= choiceBox3.getValue();
-		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(),treeView3, treeStorage);
-		
-		String id = treeView3.getSelectionModel().getSelectedItem().getValue().getId();
-		StrategyHelper.clearStrategyFromPool(playerStrategyHolder.getStrategyHolder(), id);
+		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(),treeView3);
 	}
 
 	@Override
 	public void onSelectionChanged(PlayerStrategyHolder oldSelection, PlayerStrategyHolder newSelection) {
-		TreeViewHelper.handleSelectionChanged(treeStorage, treeView3, oldSelection, newSelection);
-		mainController.notify(oldSelection,newSelection,PlayerThreeGridController.class);
-
+		TreeViewHelper.handleSelectionChanged(treeView3, oldSelection, newSelection);
 	}
 
 	@Override
@@ -98,5 +95,10 @@ public class PlayerThreeGridController implements GridController,InitializingBea
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		this.mainController.register(this);
+	}
+
+	@Override
+	public void triggerRecalculation() {
+		sendRecalculationEventToMainControler();
 	}
 }

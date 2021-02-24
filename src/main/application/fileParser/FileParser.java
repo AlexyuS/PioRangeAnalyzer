@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import main.application.cards.Card;
 import main.application.cards.CardHand;
 import main.application.cards.CardColor;
-import main.application.cards.CardStrategy;
+import main.application.cards.IndividualCardStrategy;
 import main.application.strategy.StrategyHolder;
 
 @Component
@@ -36,6 +36,7 @@ public class FileParser {
 		} catch (FileNotFoundException e) {
 			throw e;
 		}
+		this.strategies.forEach(e->e.getAggregatedCardStrategy().forEach(f->f.settleUpStrategy()));
 		return this.strategies;
 	}
 
@@ -44,7 +45,7 @@ public class FileParser {
 
 		
 		String[] rawStrategy = line.trim().split(",");
-		for (int i=0;i<rawStrategy.length;i++) {
+		for (int i=1;i<rawStrategy.length;i++) {
 			strategies.add(new StrategyHolder(rawStrategy[i]));
 		}
 
@@ -60,8 +61,9 @@ public class FileParser {
 		Integer index = 1;
 		
 		while (strategiesIterator.hasNext()) {
-			CardStrategy suitedBundle = wrapInSuitedBundle(cards,rawStrategyLine[index]);
+			IndividualCardStrategy suitedBundle = wrapInSuitedBundle(cards,rawStrategyLine[index]);
 			strategiesIterator.next().addCards(suitedBundle);
+			index++;
 		}
 
 	}
@@ -83,8 +85,8 @@ public class FileParser {
 
 	}
 	
-	private CardStrategy wrapInSuitedBundle(CardHand card,String occurance) {
-		return new CardStrategy(card, Double.parseDouble(occurance));
+	private IndividualCardStrategy wrapInSuitedBundle(CardHand card,String occurance) {
+		return new IndividualCardStrategy(card, Double.parseDouble(occurance));
 	}
 	
 	
