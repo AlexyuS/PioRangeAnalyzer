@@ -5,45 +5,50 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import main.application.cards.AggregatedCardStrategy;
-import main.application.cards.CardHand;
-import main.application.cards.CardStrategy;
 import main.application.cards.IndividualCardStrategy;
 import main.application.controller.PlayerOneGridController;
-import main.application.cards.HandGroupping;
 
 public class StrategyHolder {
 	private final static Logger LOGGER = Logger.getLogger(PlayerOneGridController.class.getName());
 
 	private final String strategyName;
 
-	private List<CardStrategy> individualCards;
+	private List<AggregatedCardStrategy> aggregatedCardStrategy;
+	private List<IndividualCardStrategy> individualCards;
+	
 	private List<StrategyHolder> childs;
 
-	private List<AggregatedCardStrategy> aggregatedCardStrategy;
+	
 
 	public StrategyHolder(String strategyName) {
 		this.strategyName = strategyName;
 		this.individualCards = new ArrayList<>();
-		this.aggregatedCardStrategy = new ArrayList<>();
 	}
 
 	public void addCards(IndividualCardStrategy suitedBundleCard) {
 		individualCards.add(suitedBundleCard);
-		aggregateCombos(suitedBundleCard, aggregatedCardStrategy);
 	}
 
+	public void setIndividualCard(List<IndividualCardStrategy>individualCards) {
+		this.individualCards = individualCards;
+	}
+	
 	public String getStrategy() {
 		return this.strategyName;
 	}
 
-	public List<CardStrategy> getIndividualCards() {
+	public List<IndividualCardStrategy> getIndividualCards() {
 		return individualCards;
+	}
+	
+	public void addIndividualCards(List<IndividualCardStrategy> individualCards){
+		this.individualCards=individualCards;
 	}
 
 	public List<StrategyHolder> getChilds() {
 		return childs;
 	}
-
+	
 	public void addChilds(List<StrategyHolder> childs) {
 		if (this.childs == null) {
 			this.childs = new ArrayList<>();
@@ -54,46 +59,19 @@ public class StrategyHolder {
 				this.childs.add(strat);
 			}
 		}
-
 	}
 
 	public List<AggregatedCardStrategy> getAggregatedCardStrategy() {
 		return aggregatedCardStrategy;
 	}
-
-	private void aggregateCombos(IndividualCardStrategy cardStrategy, List<AggregatedCardStrategy> aggrgatedCards) {
-		CardHand cardHand = cardStrategy.getCardHand();
-		HandGroupping handGroupping = determineHandGrouping(cardHand);
-		AggregatedCardStrategy aggregatedCard = new AggregatedCardStrategy(cardHand.getHighCard(),
-				cardHand.getLowCard(), handGroupping);
-		int index = aggrgatedCards.indexOf(aggregatedCard);
-		if (index == -1) {
-			LOGGER.info("New card hand "+cardHand+" is created in the list for strategy"+strategyName);
-			LOGGER.info("--------with occurance :"+cardStrategy.getOccurancePercentage());
-			LOGGER.info("--------and absolute occurance:"+cardStrategy.getAbsoluteOccurance());
-			aggregatedCard.setOccurancePercentage(cardStrategy.getOccurancePercentage());
-			aggregatedCard.setOccuranceAbsolute(cardStrategy.getAbsoluteOccurance());
-			aggrgatedCards.add(aggregatedCard);
-		} else {
-			LOGGER.info("New card hand"+cardHand+" is aggregated in the list for strategy "+strategyName);
-			LOGGER.info("--------with occurance :"+cardStrategy.getOccurancePercentage());
-			LOGGER.info("--------and absolute occurance:"+cardStrategy.getAbsoluteOccurance());
-			AggregatedCardStrategy exsitingAggregatedCard = aggrgatedCards.get(index);
-			exsitingAggregatedCard.increaseOccurancePercentage(cardStrategy.getOccurancePercentage());
-			exsitingAggregatedCard.increaseOccuranceAbsolute(cardStrategy.getAbsoluteOccurance());
-		}
+	
+	public void setAggregatedCardStrategy(List<AggregatedCardStrategy> aggregatedCards) {
+		this.aggregatedCardStrategy = aggregatedCards;
 	}
 
-	private HandGroupping determineHandGrouping(CardHand cardHand) {
-		if (cardHand.getHighCard() == cardHand.getLowCard()) {
-			return HandGroupping.PAIRED;
-		}
-		if (cardHand.getHighCardColor() == cardHand.getLowCardColor()) {
-			return HandGroupping.SUITED;
-		}
-		return HandGroupping.OFFSUITED;
-	}
+	
 
+	
 	@Override
 	public String toString() {
 		return strategyName;

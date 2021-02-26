@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import main.application.cards.AggregatedCardStrategy;
 import main.application.cards.CardStrategy;
+import main.application.cards.IndividualCardStrategy;
 import main.application.strategy.StrategyHolder;
 
 public class StrategyDiffCalculator {
@@ -22,7 +23,7 @@ public class StrategyDiffCalculator {
 	}
 
 	private void calculateCardDifferenceForIndividualCards(
-			List<CardStrategy> cards2) {
+			List<IndividualCardStrategy> cards2) {
 
 		for (CardStrategy refCard : refStrategy.getIndividualCards()) {
 			Integer indexOf = cards2.indexOf(refCard);

@@ -22,7 +22,7 @@ public class GridHelper {
 
 	private void colorGridForAggregatedCrad(List<GridPane> gridPaneList, AggregatedCardStrategy cardStrategy) {
 
-		int index = cardStrategy.getGridIndex();
+		int index = cardStrategy.getCardHand().getCardIndex();
 		double difference = cardStrategy.getDiffFromStrategyRef();
 		double occurance = cardStrategy.getOccurancePercentage();
 		GridPane grid = gridPaneList.get(index);
@@ -45,9 +45,9 @@ public class GridHelper {
 
 	private void setCardLabel(GridPane grid, AggregatedCardStrategy cardStrategy) {
 		Text occuranceTextField = getCardLabelTextField(grid);
-		String highCard = cardStrategy.getHighCard().getLabel();
-		String lowCard = cardStrategy.getLowCard().getLabel();
-		String handTypeLabel = cardStrategy.getHandGroupping().getHandTypeLabel();
+		String highCard = cardStrategy.getCardHand().getHighCard().getLabel();
+		String lowCard = cardStrategy.getCardHand().getLowCard().getLabel();
+		char handTypeLabel = cardStrategy.getCardHand().getGroupShortcut();
 		occuranceTextField.setText(highCard + lowCard + handTypeLabel);
 	}
 

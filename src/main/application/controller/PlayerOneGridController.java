@@ -17,7 +17,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -69,6 +68,9 @@ public class PlayerOneGridController implements GridController, InitializingBean
 	@FXML
 	public void onTreeMouseClicked(MouseEvent e) {
 		if (e.getButton().compareTo(MouseButton.SECONDARY) == 0) {
+			return;
+		}
+		if(treeView1.getSelectionModel().getSelectedItem()==null) {
 			return;
 		}
 		LOGGER.info("Notify controllers  to recalculate strategy differences");

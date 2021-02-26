@@ -2,12 +2,12 @@ package main.application.cards;
 
 public enum CardColor {
 
-	SPADES(0,"s"), HEARTS(1,"h"), DIAMONDS(2,"d"), CLUBS(3,"c");
+	SPADES(0,'s'), HEARTS(1,'h'), DIAMONDS(2,'d'), CLUBS(3,'c');
 
 	private Integer color;
-	private String label;
+	private char label;
 	
-	CardColor(Integer color,String label) {
+	CardColor(Integer color,char label) {
 		this.color = color;
 		this.label = label;
 	}
@@ -16,16 +16,16 @@ public enum CardColor {
 		return color;
 	}
 	
-	public String getLabel() {
+	public char getLabel() {
 		return this.label;
 	}
 	
-	public static CardColor createFrom(String color) throws Exception{
+	public static CardColor createFrom(char color) throws Exception{
 		switch(color) {
-		case("s"):return SPADES;
-		case("d"):return DIAMONDS;
-		case("c"):return CLUBS;
-		case("h"):return HEARTS;
+		case('s'):return SPADES;
+		case('d'):return DIAMONDS;
+		case('c'):return CLUBS;
+		case('h'):return HEARTS;
 		default:
 			throw new Exception("Raw color could not be converted to a type");
 		}

@@ -7,7 +7,7 @@ public class PlayerStrategyHolder {
 
 	private final String playerName;
 	private List<StrategyHolder> strategyHolder;
-
+	
 	public PlayerStrategyHolder(String name) {
 		this.playerName = name;
 		this.strategyHolder = new ArrayList<>();

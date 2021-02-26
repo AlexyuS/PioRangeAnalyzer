@@ -10,9 +10,7 @@ public interface CardStrategy {
 
 	public double getOccurancePercentage();
 
-	public Card getHighCard();
-
-	public Card getLowCard();
+	public CardHand getCardHand();
 
 	public double getDiffFromStrategyRef();
 
