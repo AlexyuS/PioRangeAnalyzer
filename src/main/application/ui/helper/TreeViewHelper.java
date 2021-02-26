@@ -19,7 +19,7 @@ public class TreeViewHelper {
 		for (StrategyHolder strategy : strategyHolder) {
 			TreeItem<StrategyHolder> item = createTreeItem(strategy);
 
-			if (parent.getChildren()==null || parent.getChildren().size() == 0) {
+			if (parent.getChildren() == null || parent.getChildren().size() == 0) {
 				parent.getChildren().add(item);
 			} else {
 				boolean notFound = parent.getChildren().stream().noneMatch(e -> e.getValue().equals(strategy));
@@ -28,13 +28,6 @@ public class TreeViewHelper {
 				}
 			}
 		}
-	}
-
-	public static TreeItem<StrategyHolder> createRootNode() {
-		StrategyHolder strategy = new StrategyHolder("Select");
-		TreeItem<StrategyHolder> treeRoot = new TreeItem<>(strategy);
-		treeRoot.addEventHandler(MouseEvent.MOUSE_PRESSED, new TreeItemClickedEvent(treeRoot));
-		return treeRoot;
 	}
 
 	private static TreeItem<StrategyHolder> createTreeItem(StrategyHolder strategy) {
@@ -51,7 +44,8 @@ public class TreeViewHelper {
 		}
 
 		if (newPlayerSelected != null) {
-			populateTreeView(treeView.getRoot(), newPlayerSelected.getStrategyHolder());
+			treeView.setRoot(createTreeItem(newPlayerSelected.getStrategyHolder()));
+			populateTreeView(treeView.getRoot(), newPlayerSelected.getStrategyHolder().getChilds());
 		}
 	}
 
@@ -74,7 +68,7 @@ public class TreeViewHelper {
 	}
 
 	public static final void clearTree(TreeView<StrategyHolder> treeView) {
-		treeView.getRoot().getChildren().clear();
+		treeView.setRoot(null);
 	}
 
 	public static final void addItemToRoot(TreeView<StrategyHolder> treeView,
@@ -84,10 +78,12 @@ public class TreeViewHelper {
 
 	public static final void removeNode(String player, TreeView<StrategyHolder> treeView) {
 		TreeItem<StrategyHolder> selectedItem = treeView.getSelectionModel().getSelectedItem();
+
 		if (selectedItem.getParent() == null) {
-			return;
+			treeView.setRoot(null);
+		} else {
+			selectedItem.getParent().getChildren().remove(selectedItem);
 		}
-		selectedItem.getParent().getChildren().remove(selectedItem);
 
 	}
 
@@ -98,7 +94,7 @@ public class TreeViewHelper {
 		}
 
 		for (StrategyHolder strategyHolder : strategies) {
-			TreeItem<StrategyHolder> treeItem = new TreeItem<>(strategyHolder);
+			TreeItem<StrategyHolder> treeItem = createTreeItem(strategyHolder);
 			rootItem.getChildren().add(treeItem);
 
 			List<StrategyHolder> childs = strategyHolder.getChilds();

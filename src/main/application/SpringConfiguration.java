@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import main.application.controller.CardDetailController;
 import main.application.controller.MainController;
 import main.application.controller.PlayerTwoGridController;
+import main.application.controller.PreflopStrategyController;
 import main.application.controller.TextAreaController;
 import main.application.controller.PlayerThreeGridController;
 import main.application.controller.PlayerFourGridController;
 import main.application.controller.PlayerOneGridController;
-import main.application.stage.CardDetailStage;
 import main.application.stage.MainStage;
+import main.application.stage.PreflopInputStage;
 import main.application.stage.SpringStage;
 import main.application.stage.TextAreaStage;
 import javafx.stage.Stage;
@@ -26,9 +26,6 @@ public class SpringConfiguration {
 
 	@Autowired
 	public Stage stage;
-	
-	@Autowired
-	public MainController mainController;
 
 	@Bean
 	public SpringStage<MainController> mainStage() throws IOException {
@@ -39,27 +36,22 @@ public class SpringConfiguration {
 	}
 
 	@Bean
-	public SpringStage<CardDetailController> cardDetailStage() throws IOException{
-		CardDetailStage detailStage = new CardDetailStage("resources/cardDetailGrid.fxml");
-		detailStage.initialize();
-		return detailStage;
-	}
-
-	@Bean
-	public TextAreaStage textAreaStage() throws IOException{
+	public TextAreaStage textAreaStage() throws IOException {
 		TextAreaStage textAreaStage = new TextAreaStage("resources/textAreaStrategy.fxml");
 		textAreaStage.initialize();
 		return textAreaStage;
 	}
 
 	@Bean
-	public MainController mainController() throws IOException {
-		return mainStage().getController();
+	public PreflopInputStage preflopInputStage() throws IOException {
+		PreflopInputStage preflopInputStage = new PreflopInputStage("resources/preflopInputTextArea.fxml");
+		preflopInputStage.initialize();
+		return preflopInputStage;
 	}
 
 	@Bean
-	public CardDetailController cardDetailController() throws IOException{
-		return cardDetailStage().getController();
+	public MainController mainController() throws IOException {
+		return mainStage().getController();
 	}
 
 	@Bean
@@ -78,15 +70,18 @@ public class SpringConfiguration {
 	}
 
 	@Bean
-	public PlayerFourGridController playerFourGridController() throws IOException  {
+	public PlayerFourGridController playerFourGridController() throws IOException {
 		return mainController().getPlayerFourController();
 	}
-	
+
 	@Bean
-	public TextAreaController textAreaController() throws IOException  {
+	public TextAreaController textAreaController() throws IOException {
 		return textAreaStage().getController();
 	}
-	
-	
-	
+
+	@Bean
+	public PreflopStrategyController preflopStrategyController() throws IOException {
+		return preflopInputStage().getController();
+	}
+
 }

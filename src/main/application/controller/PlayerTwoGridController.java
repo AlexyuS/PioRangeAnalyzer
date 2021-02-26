@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import main.application.stage.PocketPairGridStage;
 import main.application.stage.SpringStage;
 import main.application.stage.TextAreaStage;
 import main.application.strategy.PlayerPoolStrategyHolder;
@@ -32,8 +33,8 @@ public class PlayerTwoGridController implements GridController, InitializingBean
 	public TextAreaStage textAreaStage;
 
 	@Autowired
-	public SpringStage<CardDetailController> cardDetailStage;
-
+	private PocketPairGridStage pocketPairWindow;
+	
 	@Autowired
 	public PlayerPoolStrategyHolder playerPool;
 
@@ -46,6 +47,9 @@ public class PlayerTwoGridController implements GridController, InitializingBean
 	@FXML
 	public GridPane cardGrid2;
 	
+	@FXML
+	public GridPane playerTwoHeader;
+	
 
 	@FXML
 	public void onTreeMouseClicked(MouseEvent e) {
@@ -53,15 +57,15 @@ public class PlayerTwoGridController implements GridController, InitializingBean
 			return;
 		}
 		LOGGER.info("recalculation for "+PlayerTwoGridController.class.getName()+" was triggered");
-		sendRecalculationEventToMainControler();
+		requestColorGrid();
 	}
 
-	private void sendRecalculationEventToMainControler() {
+	private void requestColorGrid() {
 		if (treeView2.getSelectionModel().getSelectedItem() == null) {
 			return;
 		}
 		StrategyHolder strategy = treeView2.getSelectionModel().getSelectedItem().getValue();
-		mainController.triggerStrategyCalculation(strategy,cardGrid2);
+		mainController.fillGridForStrategy(strategy,cardGrid2);
 	}
 
 	
@@ -72,8 +76,15 @@ public class PlayerTwoGridController implements GridController, InitializingBean
 
 	@Override
 	public void onTreeDelete(ActionEvent e) {
+		StrategyHolder value = treeView2.getSelectionModel().getSelectedItem().getValue();
+		
+		if(value.getStrategy().equals(treeView2.getRoot().getValue().getStrategy())) {
+			return;
+		}
 		PlayerStrategyHolder playerStrategyHolder = choiceBox2.getValue();
 		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(), treeView2);
+		this.mainController.notifyStrategyRemove(playerStrategyHolder.getPlayerName(),value);
+
 	}
 
 	@Override
@@ -86,18 +97,25 @@ public class PlayerTwoGridController implements GridController, InitializingBean
 		ChoiceSelectionHelper.populateChoiceList(choiceBox2, player);
 	}
 
-	@Override
-	public void removePlayerFromChoiceList(PlayerStrategyHolder player) {
-		ChoiceSelectionHelper.removeDirtyPlayer(choiceBox2, player);
-	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		mainController.register(this);
+		this.mainController.registerForAnyPlayerSelectionChanged(this);
+		this.mainController.registerForTreeViewChanged(this);
 	}
 
 	@Override
 	public void triggerRecalculation() {
-		sendRecalculationEventToMainControler();
+		requestColorGrid();
 	}
+
+	@Override
+	public void removeTreeItemForPlayerAndStrategy(String playerName, StrategyHolder strategy) {
+		if(!choiceBox2.getValue().getPlayerName().equals(playerName)) {
+			return;
+		}
+		treeView2.getRoot().getChildren().removeIf(e->e.getValue().getStrategy()==strategy.getStrategy());
+	}
+	
+	
 }

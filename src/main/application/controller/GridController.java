@@ -4,6 +4,7 @@ package main.application.controller;
 
 import javafx.event.ActionEvent;
 import main.application.strategy.PlayerStrategyHolder;
+import main.application.strategy.StrategyHolder;
 
 public interface GridController extends Controller {
 
@@ -11,11 +12,12 @@ public interface GridController extends Controller {
 
 	void onTreeDelete(ActionEvent e);
 
+	void removeTreeItemForPlayerAndStrategy(String playerName,StrategyHolder strategy);
+	
 	void onSelectionChanged(PlayerStrategyHolder oldSelection, PlayerStrategyHolder newSelection);
 
 	public void addPlayerToChoiceList(PlayerStrategyHolder players);
-	
-	public void removePlayerFromChoiceList(PlayerStrategyHolder player);
-	
+		
 	public void triggerRecalculation();
+	
 }

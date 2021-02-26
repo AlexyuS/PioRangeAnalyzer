@@ -5,38 +5,44 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import main.application.cards.AggregatedCardStrategy;
-import main.application.cards.CardHand;
-import main.application.cards.CardStrategy;
 import main.application.cards.IndividualCardStrategy;
 import main.application.controller.PlayerOneGridController;
-import main.application.cards.HandGroupping;
+import main.application.exception.StrategyChainMismatchException;
 
 public class StrategyHolder {
 	private final static Logger LOGGER = Logger.getLogger(PlayerOneGridController.class.getName());
 
 	private final String strategyName;
 
-	private List<CardStrategy> individualCards;
-	private List<StrategyHolder> childs;
-
 	private List<AggregatedCardStrategy> aggregatedCardStrategy;
+	private List<IndividualCardStrategy> individualCards;
 
-	public StrategyHolder(String strategyName) {
+	private List<StrategyHolder> childs;
+	private StrategyHolder parent;
+
+	public StrategyHolder(String strategyName,StrategyHolder parent) {
 		this.strategyName = strategyName;
 		this.individualCards = new ArrayList<>();
-		this.aggregatedCardStrategy = new ArrayList<>();
+		this.parent = parent;
 	}
 
-	public void addCards(IndividualCardStrategy suitedBundleCard) {
-		individualCards.add(suitedBundleCard);
-		aggregateCombos(suitedBundleCard, aggregatedCardStrategy);
+	
+	public void addCards(IndividualCardStrategy individualCard) {
+		double parentOccurance = findParrentTotalOccurance(individualCard);
+		individualCard.setOccurancePercentage(parentOccurance/100*individualCard.getOccurancePercentage());
+		individualCard.setAbsoluteOccurance(parentOccurance/100*individualCard.getAbsoluteOccurance());
+		individualCards.add(individualCard);
+	}
+
+	public void setIndividualCards(List<IndividualCardStrategy> individualCards) {
+		this.individualCards = individualCards;
 	}
 
 	public String getStrategy() {
 		return this.strategyName;
 	}
 
-	public List<CardStrategy> getIndividualCards() {
+	public List<IndividualCardStrategy> getIndividualCards() {
 		return individualCards;
 	}
 
@@ -44,56 +50,40 @@ public class StrategyHolder {
 		return childs;
 	}
 
+	public StrategyHolder getParent() {
+		return parent;
+	}
+	
+	public void setParent(StrategyHolder parent) {
+		this.parent = parent;
+	}
+
+
 	public void addChilds(List<StrategyHolder> childs) {
 		if (this.childs == null) {
 			this.childs = new ArrayList<>();
 		}
-
+		
 		for (StrategyHolder strat : childs) {
 			if (!this.childs.contains(strat)) {
-				this.childs.add(strat);
-			}
+				this.childs.add(strat);			}
 		}
-
 	}
 
 	public List<AggregatedCardStrategy> getAggregatedCardStrategy() {
 		return aggregatedCardStrategy;
 	}
 
-	private void aggregateCombos(IndividualCardStrategy cardStrategy, List<AggregatedCardStrategy> aggrgatedCards) {
-		CardHand cardHand = cardStrategy.getCardHand();
-		HandGroupping handGroupping = determineHandGrouping(cardHand);
-		AggregatedCardStrategy aggregatedCard = new AggregatedCardStrategy(cardHand.getHighCard(),
-				cardHand.getLowCard(), handGroupping);
-		int index = aggrgatedCards.indexOf(aggregatedCard);
-		if (index == -1) {
-			LOGGER.info("New card hand "+cardHand+" is created in the list for strategy"+strategyName);
-			LOGGER.info("--------with occurance :"+cardStrategy.getOccurancePercentage());
-			LOGGER.info("--------and absolute occurance:"+cardStrategy.getAbsoluteOccurance());
-			aggregatedCard.setOccurancePercentage(cardStrategy.getOccurancePercentage());
-			aggregatedCard.setOccuranceAbsolute(cardStrategy.getAbsoluteOccurance());
-			aggrgatedCards.add(aggregatedCard);
-		} else {
-			LOGGER.info("New card hand"+cardHand+" is aggregated in the list for strategy "+strategyName);
-			LOGGER.info("--------with occurance :"+cardStrategy.getOccurancePercentage());
-			LOGGER.info("--------and absolute occurance:"+cardStrategy.getAbsoluteOccurance());
-			AggregatedCardStrategy exsitingAggregatedCard = aggrgatedCards.get(index);
-			exsitingAggregatedCard.increaseOccurancePercentage(cardStrategy.getOccurancePercentage());
-			exsitingAggregatedCard.increaseOccuranceAbsolute(cardStrategy.getAbsoluteOccurance());
-		}
+	public void setAggregatedCardStrategy(List<AggregatedCardStrategy> aggregatedCards) {
+		this.aggregatedCardStrategy = aggregatedCards;
 	}
 
-	private HandGroupping determineHandGrouping(CardHand cardHand) {
-		if (cardHand.getHighCard() == cardHand.getLowCard()) {
-			return HandGroupping.PAIRED;
-		}
-		if (cardHand.getHighCardColor() == cardHand.getLowCardColor()) {
-			return HandGroupping.SUITED;
-		}
-		return HandGroupping.OFFSUITED;
+	private double findParrentTotalOccurance(IndividualCardStrategy individualCardStrategy) {
+		return this.getParent().getIndividualCards().stream()
+				.filter(e->e.getCardHand().equals(individualCardStrategy.getCardHand()))
+				.findAny().orElseThrow(()->new StrategyChainMismatchException(individualCardStrategy, strategyName)).getOccurancePercentage();
 	}
-
+	
 	@Override
 	public String toString() {
 		return strategyName;

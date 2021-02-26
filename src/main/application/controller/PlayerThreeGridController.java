@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import main.application.stage.PocketPairGridStage;
 import main.application.stage.SpringStage;
 import main.application.stage.TextAreaStage;
 import main.application.strategy.PlayerPoolStrategyHolder;
@@ -21,7 +22,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
-public class PlayerThreeGridController implements GridController,InitializingBean {
+public class PlayerThreeGridController implements GridController, InitializingBean {
 	@SuppressWarnings("unused")
 	private final static Logger LOGGER = Logger.getLogger(PlayerThreeGridController.class.getName());
 
@@ -29,10 +30,10 @@ public class PlayerThreeGridController implements GridController,InitializingBea
 	public MainController mainController;
 
 	@Autowired
-	public TextAreaStage textAreaStage;
-
+	private PocketPairGridStage pocketPairWindow;
+	
 	@Autowired
-	public SpringStage<CardDetailController> cardDetailStage;
+	public TextAreaStage textAreaStage;
 
 	@Autowired
 	public PlayerPoolStrategyHolder playerPool;
@@ -45,27 +46,27 @@ public class PlayerThreeGridController implements GridController,InitializingBea
 
 	@FXML
 	public GridPane cardGrid3;
+
+	@FXML
+	public GridPane playerThreeHeader;
 	
 	@FXML
-	public void onTreeMouseClicked(MouseEvent e){
-		if(e.getButton().compareTo(MouseButton.SECONDARY)==0) {
+	public void onTreeMouseClicked(MouseEvent e) {
+		if (e.getButton().compareTo(MouseButton.SECONDARY) == 0) {
 			return;
 		}
 		sendRecalculationEventToMainControler();
 	}
-	
+
 	private void sendRecalculationEventToMainControler() {
-		if(treeView3.getSelectionModel().getSelectedItem()==null){
+		if (treeView3.getSelectionModel().getSelectedItem() == null) {
 			return;
 		}
-		
+
 		StrategyHolder strategy = treeView3.getSelectionModel().getSelectedItem().getValue();
-		mainController.triggerStrategyCalculation(strategy, cardGrid3);
+		mainController.fillGridForStrategy(strategy, cardGrid3);
 	}
-	
-	
-	
-	
+
 	@Override
 	public void onTreeInsert(ActionEvent e) {
 		TextAreaStageHelper.open(textAreaStage, choiceBox3, treeView3);
@@ -73,8 +74,15 @@ public class PlayerThreeGridController implements GridController,InitializingBea
 
 	@Override
 	public void onTreeDelete(ActionEvent e) {
-		PlayerStrategyHolder playerStrategyHolder= choiceBox3.getValue();
-		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(),treeView3);
+		StrategyHolder strategyHolder = treeView3.getSelectionModel().getSelectedItem().getValue();
+
+		if(strategyHolder.getStrategy().equals(treeView3.getRoot().getValue().getStrategy())) {
+			return;
+		}
+		PlayerStrategyHolder playerStrategyHolder = choiceBox3.getValue();
+		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(), treeView3);
+		this.mainController.notifyStrategyRemove(playerStrategyHolder.getPlayerName(), strategyHolder);
+
 	}
 
 	@Override
@@ -88,17 +96,23 @@ public class PlayerThreeGridController implements GridController,InitializingBea
 	}
 
 	@Override
-	public void removePlayerFromChoiceList(PlayerStrategyHolder player) {
-		ChoiceSelectionHelper.removeDirtyPlayer(choiceBox3, player);
-	}
-
-	@Override
 	public void afterPropertiesSet() throws Exception {
-		this.mainController.register(this);
+		this.mainController.registerForAnyPlayerSelectionChanged(this);
+		this.mainController.registerForTreeViewChanged(this);
 	}
 
 	@Override
 	public void triggerRecalculation() {
 		sendRecalculationEventToMainControler();
 	}
+
+	@Override
+	public void removeTreeItemForPlayerAndStrategy(String playerName, StrategyHolder strategy) {
+		if(!choiceBox3.getValue().getPlayerName().equals(playerName)) {
+			return;
+		}
+		treeView3.getRoot().getChildren().removeIf(e -> e.getValue().getStrategy() == strategy.getStrategy());
+
+	}
+
 }

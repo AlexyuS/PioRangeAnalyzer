@@ -3,7 +3,6 @@ package main.application.stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import main.application.cards.IndividualCardStrategy;
 import main.application.controller.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -43,27 +42,17 @@ public abstract class SpringStage<E extends Controller> {
 		stage.show();
 	}
 	
-	public void open(IndividualCardStrategy ... params) throws Exception {
-		stage.show();
-	}
-	
 	public void close() {
 		stage.close();
-		onClose(stage);
 	}
 	public E getController() {
 		return loader.getController();
 	}
 	
-	public void refreshUI() {
-		refreshUI(stage);
-	}
-	
-	protected abstract void refreshUI(Stage stage);
-	
 	protected abstract void afterInitialize(Stage stage);
 	
-	protected abstract void onClose(Stage stage);
 
-
+	protected Stage getStage(){
+		return stage;
+	}
 }

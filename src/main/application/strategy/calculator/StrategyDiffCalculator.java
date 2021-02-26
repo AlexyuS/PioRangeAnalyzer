@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import main.application.cards.AggregatedCardStrategy;
 import main.application.cards.CardStrategy;
+import main.application.cards.IndividualCardStrategy;
 import main.application.strategy.StrategyHolder;
 
 public class StrategyDiffCalculator {
@@ -16,36 +17,40 @@ public class StrategyDiffCalculator {
 		this.refStrategy = baseStrategy;
 	}
 
-	public void calculateIndividualStrategies(StrategyHolder strategy1) {
-		calculateCardDifferenceForIndividualCards(strategy1.getIndividualCards());
+	public void calculateStrategies(StrategyHolder strategy1) {
+		//calculateCardDifferenceForIndividualCards(strategy1.getIndividualCards());
 		calculateCardDifferenceForAggregatedCards(strategy1.getAggregatedCardStrategy());
 	}
 
 	private void calculateCardDifferenceForIndividualCards(
-			List<CardStrategy> cards2) {
-
-		for (CardStrategy refCard : refStrategy.getIndividualCards()) {
-			Integer indexOf = cards2.indexOf(refCard);
+			List<IndividualCardStrategy> calculatableCards) {
+		
+		List<IndividualCardStrategy> refCards = this.refStrategy.getIndividualCards();
+		for (CardStrategy calculatableCard : calculatableCards) {
+			Integer indexOf = refCards.indexOf(calculatableCard);
 			if (indexOf == -1) {
-				refCard.setDifferenceFromStrategyRef(refCard.getOccurancePercentage());
+				calculatableCard.setDifferenceFromStrategyRef(calculatableCard.getOccurancePercentage());
 			} else {
-				CardStrategy cardToBeCalculated = cards2.get(indexOf);
-				cardToBeCalculated.setDifferenceFromStrategyRef(cardToBeCalculated.getOccurancePercentage()-refCard.getOccurancePercentage());
+				CardStrategy refCard = refCards.get(indexOf);
+				calculatableCard.setDifferenceFromStrategyRef(calculatableCard.getOccurancePercentage()-refCard.getOccurancePercentage());
 			}
 		}
 	}
 	
 	private void calculateCardDifferenceForAggregatedCards(
-			List<AggregatedCardStrategy> cards2) {
-
-		for (CardStrategy refCard : refStrategy.getAggregatedCardStrategy()) {
-			Integer indexOf = cards2.indexOf(refCard);
+			List<AggregatedCardStrategy> calculatableCards) {
+		
+		List<AggregatedCardStrategy> refCards = this.refStrategy.getAggregatedCardStrategy();
+		for (CardStrategy calculatableCard : calculatableCards) {
+			Integer indexOf = refCards.indexOf(calculatableCard);
 			if (indexOf == -1) {
-				refCard.setDifferenceFromStrategyRef(refCard.getOccurancePercentage());
+				calculatableCard.setDifferenceFromStrategyRef(calculatableCard.getOccurancePercentage());
 			} else {
-				CardStrategy cardToBeCalculated = cards2.get(indexOf);
-				cardToBeCalculated.setDifferenceFromStrategyRef(cardToBeCalculated.getOccurancePercentage()-refCard.getOccurancePercentage());
+				CardStrategy refCard = refCards.get(indexOf);
+				calculatableCard.setDifferenceFromStrategyRef(calculatableCard.getOccurancePercentage()-refCard.getOccurancePercentage());
 			}
 		}
 	}
+	
+	
 }

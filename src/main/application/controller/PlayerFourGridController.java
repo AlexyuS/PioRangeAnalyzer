@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import main.application.stage.SpringStage;
+import main.application.stage.PocketPairGridStage;
 import main.application.stage.TextAreaStage;
 import main.application.strategy.PlayerPoolStrategyHolder;
 import main.application.strategy.PlayerStrategyHolder;
@@ -16,7 +16,6 @@ import main.application.ui.helper.TreeViewHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -33,10 +32,10 @@ public class PlayerFourGridController implements GridController,InitializingBean
 	public MainController mainController;
 	
 	@Autowired
-	public TextAreaStage textAreaStage;
-
+	private PocketPairGridStage pocketPairWindow;
+	
 	@Autowired
-	public SpringStage<CardDetailController> cardDetailStage;
+	public TextAreaStage textAreaStage;
 
 	@Autowired
 	public PlayerPoolStrategyHolder playerPool;
@@ -50,6 +49,9 @@ public class PlayerFourGridController implements GridController,InitializingBean
 	@FXML
 	public GridPane cardGrid4;
 
+	@FXML
+	public GridPane playerFourHeader;
+	
 	@FXML
 	public void onTreeMouseClicked(MouseEvent e){
 		if(e.getButton().compareTo(MouseButton.SECONDARY)==0) {
@@ -65,11 +67,13 @@ public class PlayerFourGridController implements GridController,InitializingBean
 
 	@Override
 	public void onTreeDelete(ActionEvent e) {
-		TreeItem<StrategyHolder> selectedItem = treeView4.getSelectionModel().getSelectedItem();
-		if (selectedItem.getParent() == null) {
+		StrategyHolder strategy = treeView4.getSelectionModel().getSelectedItem().getValue();
+		if(strategy.getStrategy().equals(treeView4.getRoot().getValue().getStrategy())){
 			return;
 		}
-		selectedItem.getParent().getChildren().remove(selectedItem);
+		PlayerStrategyHolder playerStrategyHolder = choiceBox4.getValue();
+		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(), treeView4);
+		this.mainController.notifyStrategyRemove(playerStrategyHolder.getPlayerName(),strategy);
 	}
 
 	@Override
@@ -83,13 +87,9 @@ public class PlayerFourGridController implements GridController,InitializingBean
 	}
 
 	@Override
-	public void removePlayerFromChoiceList(PlayerStrategyHolder player) {
-		ChoiceSelectionHelper.removeDirtyPlayer(choiceBox4, player);
-	}
-
-	@Override
 	public void afterPropertiesSet() throws Exception {
-		this.mainController.register(this);
+		this.mainController.registerForAnyPlayerSelectionChanged(this);
+		this.mainController.registerForTreeViewChanged(this);
 	}
 
 	@Override
@@ -102,10 +102,19 @@ public class PlayerFourGridController implements GridController,InitializingBean
 			return;
 		}
 		StrategyHolder strategy = treeView4.getSelectionModel().getSelectedItem().getValue();
-		mainController.triggerStrategyCalculation(strategy, cardGrid4);
+		mainController.fillGridForStrategy(strategy, cardGrid4);
+	}
+
+	@Override
+	public void removeTreeItemForPlayerAndStrategy(String playerName, StrategyHolder strategy) {
+		if(!choiceBox4.getValue().getPlayerName().equals(playerName)) {
+			return;
+		}
+		
+		treeView4.getRoot().getChildren().removeIf(e->e.getValue().getStrategy()==strategy.getStrategy());
 	}
 
 
-	
+
 
 }

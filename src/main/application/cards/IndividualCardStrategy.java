@@ -1,20 +1,23 @@
 package main.application.cards;
 
-
-
 public class IndividualCardStrategy implements CardStrategy {
 
-	private final CardHand cardHand;
-	private double diff;
+	private final IndividualCardHand cardHand;
+	private double differenceFromRefStrategy;
 	private double occurancePercentage;
 	private double absoluteOccurence;
-	
-	public IndividualCardStrategy(CardHand cardHand, double occurance) {
+
+	public IndividualCardStrategy(IndividualCardHand cardHand, double occurance) {
 		this.cardHand = cardHand;
 		this.occurancePercentage = occurance;
-		this.absoluteOccurence = this.occurancePercentage/100;
+		this.absoluteOccurence = this.occurancePercentage / 100;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "IndividualCardStrategy [cardHand=" + cardHand + ", occurancePercentage=" + occurancePercentage + "]";
+	}
+
 	@Override
 	public double getOccurancePercentage() {
 		return occurancePercentage;
@@ -23,7 +26,7 @@ public class IndividualCardStrategy implements CardStrategy {
 	@Override
 	public void setOccurancePercentage(double occurancePercentage) {
 		this.occurancePercentage = occurancePercentage;
-		
+
 	}
 
 	@Override
@@ -32,43 +35,24 @@ public class IndividualCardStrategy implements CardStrategy {
 	}
 
 	@Override
-	public void setOccuranceAbsolute(double absoluteOccurence) {
-		this.absoluteOccurence =absoluteOccurence;
+	public void setAbsoluteOccurance(double absoluteOccurence) {
+		this.absoluteOccurence = absoluteOccurence;
 	}
 
-	@Override
-	public Card getHighCard() {
-		return this.cardHand.getHighCard();
-	}
-
-	@Override
-	public Card getLowCard() {
-		return this.cardHand.getLowCard();
-	}
-	
 	@Override
 	public double getDiffFromStrategyRef() {
-		return diff;
+		return differenceFromRefStrategy;
 	}
 
 	@Override
 	public void setDifferenceFromStrategyRef(double diff) {
-		this.diff = diff;
+		this.differenceFromRefStrategy = diff;
 	}
 
-	public CardColor getLowCardColor() {
-		return this.cardHand.getLowCardColor();
-	}
-	
-	public CardColor getHighCardColor() {
-		return this.cardHand.getHighCardColor();
-	}
-	
-	public CardHand getCardHand() {
+	public IndividualCardHand getCardHand() {
 		return this.cardHand;
 	}
-	
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

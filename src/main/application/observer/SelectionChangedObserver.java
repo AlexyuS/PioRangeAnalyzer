@@ -2,10 +2,19 @@ package main.application.observer;
 
 
 import main.application.controller.GridController;
-import main.application.strategy.PlayerStrategyHolder;
 
 public interface SelectionChangedObserver {
 	
-	public void register(GridController controller) ;
+	/**
+	 * Registers for any changes on any selection changed grid
+	 * @param controller
+	 */
+	public void registerForAnyPlayerSelectionChanged(GridController controller) ;
+	
+	/**
+	 * Executes when any change on any player selection changed
+	 * @param source
+	 */
+	public void onParentPlayerSelectionChanged();
 	
 }

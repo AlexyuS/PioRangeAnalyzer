@@ -1,47 +1,48 @@
 package main.application.cards;
 
-public class CardHand {
+public abstract class CardHand {
 
-	
 	private final Card highCard;
 	private final CardColor highCardColor;
 
 	private final Card lowCard;
 	private final CardColor lowCardColor;
-	
-	private final boolean isSuited;
+
+	private int gridPos;
 
 	public CardHand(Card highCard, CardColor highCardColor, Card lowCard, CardColor lowCardColor) {
 		this.highCard = highCard;
 		this.highCardColor = highCardColor;
 		this.lowCard = lowCard;
 		this.lowCardColor = lowCardColor;
-		this.isSuited = lowCardColor.equals(highCardColor);
+		gridPos = calculateGridPosition();
 	}
 
 	public Card getHighCard() {
-		return highCard;
+		return this.highCard;
 	}
 
 	public CardColor getHighCardColor() {
-		return highCardColor;
+		return this.highCardColor;
 	}
 
 	public Card getLowCard() {
-		return lowCard;
+		return this.lowCard;
 	}
 
 	public CardColor getLowCardColor() {
-		return lowCardColor;
+		return this.lowCardColor;
 	}
 
-	public boolean isSuited() {
-		return isSuited;
+	public int getCardIndex() {
+		return this.gridPos;
 	}
-	@Override
-	public String toString() {
-		return this.highCard.getLabel()+this.highCardColor.getLabel()+this.lowCard.getLabel()+this.lowCardColor.getLabel();
-	}
+
+	public abstract char getGroupShortcut();
+
+	protected abstract int calculateGridPosition();
+
+	protected abstract int getStandardCardOccurance();
 
 	@Override
 	public int hashCode() {
@@ -63,15 +64,20 @@ public class CardHand {
 		if (getClass() != obj.getClass())
 			return false;
 		CardHand other = (CardHand) obj;
-		if (!highCard.equals(other.highCard))
+		if (highCard != other.highCard)
 			return false;
-		if (!highCardColor.equals(other.highCardColor))
+		if (highCardColor != other.highCardColor)
 			return false;
-		if (!lowCard.equals(other.lowCard))
+		if (lowCard != other.lowCard)
 			return false;
-		if (!lowCardColor.equals(other.lowCardColor))
+		if (lowCardColor != other.lowCardColor)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return highCard.getLabel() + highCardColor.getLabel() + lowCard.getLabel() + lowCardColor.getLabel();
 	}
 
 }

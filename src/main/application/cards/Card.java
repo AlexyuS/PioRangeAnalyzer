@@ -16,33 +16,33 @@ public enum Card {
 		return cardRank;
 	}
 
-	public static Card createFrom(String card) throws Exception {
+	public static Card createFrom(char card) throws Exception {
 		switch (card) {
-		case "A":
+		case 'A':
 			return ACE;
-		case "K":
+		case 'K':
 			return KING;
-		case "Q":
+		case 'Q':
 			return QUEEN;
-		case "J":
+		case 'J':
 			return JACK;
-		case "T":
+		case 'T':
 			return TEN;
-		case "9":
+		case '9':
 			return NINE;
-		case "8":
+		case '8':
 			return EIGHT;
-		case "7":
+		case '7':
 			return SEVEN;
-		case "6":
+		case '6':
 			return SIX;
-		case "5":
+		case '5':
 			return FIVE;
-		case "4":
+		case '4':
 			return FOUR;
-		case "3":
+		case '3':
 			return THREE;
-		case "2":
+		case '2':
 			return TWO;
 		default:
 			throw new Exception("Raw card could not be converted to a type");

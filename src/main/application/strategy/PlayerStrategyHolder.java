@@ -1,27 +1,25 @@
 package main.application.strategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerStrategyHolder {
 
 	private final String playerName;
-	private List<StrategyHolder> strategyHolder;
-
+	private StrategyHolder strategyHolder;
+	
 	public PlayerStrategyHolder(String name) {
 		this.playerName = name;
-		this.strategyHolder = new ArrayList<>();
 	}
 
 	public String getPlayerName() {
 		return playerName;
 	}
 
-	public List<StrategyHolder> getStrategyHolder() {
+	public StrategyHolder getStrategyHolder() {
 		return strategyHolder;
 	}
 
-	public void setStrategyHolder(List<StrategyHolder> strategyHolder) {
+	public void setStrategyHolder(StrategyHolder strategyHolder) {
 		this.strategyHolder = strategyHolder;
 	}
 

@@ -14,15 +14,14 @@ public class PlayerPoolStrategyHolder {
 	
 	public PlayerPoolStrategyHolder() {
 		this.playerPool = new HashMap<>();
-		this.playerPool.put("ROOT", new PlayerStrategyHolder("Select"));
 	}
 	
 	public PlayerStrategyHolder getStrategyForPlayer (String player) {
 		return playerPool.get(player);
 	}
 	
-	public void putNewPlayerStrategy(String player) {
-		this.playerPool.put(player, new PlayerStrategyHolder(player));
+	public void putNewPlayerStrategy(PlayerStrategyHolder player) {
+		this.playerPool.put(player.getPlayerName(), player);
 	}
 	
 	public Set<String> getAllPlayers(){
