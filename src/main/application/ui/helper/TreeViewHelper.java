@@ -57,6 +57,10 @@ public class TreeViewHelper {
 		return new ImageView(new Image(new File("resources/arrow_right_16x16.png").toURI().toString()));
 	}
 
+	public static boolean hasChild(TreeView<StrategyHolder> treeView, StrategyHolder strategy) {
+		return true;
+	}
+
 	public static void expandTree(TreeItem<StrategyHolder> treeItem) {
 		treeItem.setExpanded(true);
 		treeItem.setGraphic(createTreeExpandedIcon());
@@ -67,27 +71,26 @@ public class TreeViewHelper {
 		treeItem.setGraphic(createTreeNonExpandedIcon());
 	}
 
+	public static final void refreshTreeView(StrategyHolder rootStrategy,TreeView<StrategyHolder> treeView) {
+		clearTree(treeView);
+		addItemToRoot(treeView, rootStrategy);
+		populateTreeView(treeView.getRoot(), rootStrategy.getChilds());
+		
+	}
 	public static final void clearTree(TreeView<StrategyHolder> treeView) {
 		treeView.setRoot(null);
 	}
 
 	public static final void addItemToRoot(TreeView<StrategyHolder> treeView,
-			List<TreeItem<StrategyHolder>> childrens) {
-		treeView.getRoot().getChildren().addAll(childrens);
+			StrategyHolder strategy) {
+		treeView.setRoot(createTreeItem(strategy));
 	}
 
-	public static final void removeNode(String player, TreeView<StrategyHolder> treeView) {
-		TreeItem<StrategyHolder> selectedItem = treeView.getSelectionModel().getSelectedItem();
-
-		if (selectedItem.getParent() == null) {
-			treeView.setRoot(null);
-		} else {
-			selectedItem.getParent().getChildren().remove(selectedItem);
-		}
-
+	public static final void removeNode(TreeView<StrategyHolder> treeView, StrategyHolder deletedStrategy) {
+		treeView.getRoot().getChildren().removeIf(e -> e.getValue().getStrategy() == deletedStrategy.getStrategy());
 	}
 
-	private static final void populateTreeView(TreeItem<StrategyHolder> rootItem, List<StrategyHolder> strategies) {
+	public static final void populateTreeView(TreeItem<StrategyHolder> rootItem, List<StrategyHolder> strategies) {
 
 		if (strategies == null) {
 			return;
@@ -96,11 +99,15 @@ public class TreeViewHelper {
 		for (StrategyHolder strategyHolder : strategies) {
 			TreeItem<StrategyHolder> treeItem = createTreeItem(strategyHolder);
 			rootItem.getChildren().add(treeItem);
-
-			List<StrategyHolder> childs = strategyHolder.getChilds();
-			if (childs != null && childs.size() > 0) {
-				populateTreeView(treeItem, strategyHolder.getChilds());
-			}
+			populateTreeView(treeItem, strategyHolder.getChilds());
 		}
+	}
+
+	public static boolean currentSelectionIsRootNode(TreeView<StrategyHolder> treeView) {
+		StrategyHolder strategyHolder = treeView.getSelectionModel().getSelectedItem().getValue();
+		if (strategyHolder.equals(treeView.getRoot().getValue())) {
+			return true;
+		}
+		return false;
 	}
 }

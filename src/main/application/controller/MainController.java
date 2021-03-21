@@ -1,26 +1,27 @@
 package main.application.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import main.application.observer.SelectionChangedObserver;
-import main.application.observer.TreeViewChangedObserver;
+import main.application.cards.AggregatedCardStrategy;
+import main.application.fileParser.StrategyReader;
 import main.application.stage.PreflopInputStage;
+import main.application.stage.PreflopInputStage.PreflopInputResult;
+import main.application.strategy.PlayerPoolStrategyHolder;
 import main.application.strategy.PlayerStrategyHolder;
 import main.application.strategy.StrategyHolder;
-import main.application.strategy.calculator.StrategyDiffCalculator;
-import main.application.ui.helper.GridHelper;
+import main.application.strategy.helper.StrategyAggregator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
 
 @Component
-public class MainController implements Controller, SelectionChangedObserver,TreeViewChangedObserver {
+public class MainController implements Controller {
 	
 	@Autowired
 	private PreflopInputStage preflopStage;
@@ -42,41 +43,30 @@ public class MainController implements Controller, SelectionChangedObserver,Tree
 
 	@FXML
 	public PlayerFourGridController playerFourController;
-
-	private List<GridController> parentPlayerChangedListener;
 	
-	private List<GridController> treeDeletionListener;
-
-	@Override
-	public void registerForTreeViewChanged(GridController controller) {
-		if (treeDeletionListener == null) {
-			this.treeDeletionListener = new ArrayList<>();
-		}
-		treeDeletionListener.add(controller);
-	}
-
-
-	@Override
-	public void registerForAnyPlayerSelectionChanged(GridController controller) {
-		if (parentPlayerChangedListener == null) {
-			this.parentPlayerChangedListener = new ArrayList<>();
-		}
-		parentPlayerChangedListener.add(controller);
-	}
+	@Autowired
+	private ApplicationEventPublisher applicationEventPublisher;
 	
-	@Override
-	public void notifyStrategyRemove(String playerName, StrategyHolder strategy) {
-		treeDeletionListener.forEach(e->e.removeTreeItemForPlayerAndStrategy(playerName, strategy));
-	}
-
-	@Override
-	public void onParentPlayerSelectionChanged() {
-		parentPlayerChangedListener.forEach(e->e.triggerRecalculation());
-	}
+	@Autowired
+	private PlayerPoolStrategyHolder playerPool;
 	
 	@FXML
 	public void onAddPlayer(ActionEvent event) {
 		preflopStage.open();
+		PreflopInputResult result = preflopStage.getResult();
+		
+		StrategyReader fileParser = new StrategyReader();
+		StrategyHolder preflopStrategy = fileParser.parsePreflopStrategy(result.getStrategy());
+				
+		List<AggregatedCardStrategy> aggregatedCards = StrategyAggregator.aggregateIndividualCards(preflopStrategy.getIndividualCards());
+		preflopStrategy.setAggregatedCardStrategy(aggregatedCards);
+		
+		PlayerStrategyHolder playerStrategyHolder =  new PlayerStrategyHolder(preflopStage.getResult().getPlayerName());		
+		playerStrategyHolder.setStrategyHolder(preflopStrategy);
+		
+		playerPool.putNewPlayerStrategy(playerStrategyHolder);
+		
+		applicationEventPublisher.publishEvent(playerStrategyHolder);
 	}
 
 	
@@ -97,29 +87,18 @@ public class MainController implements Controller, SelectionChangedObserver,Tree
 	}
 
 	
-	public void insertNewPlayer(PlayerStrategyHolder playerPool) {
-		playerOneController.addPlayerToChoiceList(playerPool);
-		playerTwoController.addPlayerToChoiceList(playerPool);
-		playerThreeController.addPlayerToChoiceList(playerPool);
-		playerFourController.addPlayerToChoiceList(playerPool);
-	}
-
-
 	public void fillGridForStrategy(StrategyHolder strategyHolder,GridPane parentGrid) {
 		if(strategyHolder==null) {
 			return;
 		}
-		StrategyHolder strategy = playerOneController.getRefStrategyFromFirstView();
 		
-		StrategyDiffCalculator strategyDifCalculator =  new StrategyDiffCalculator(strategy);
-		strategyDifCalculator.calculateStrategies(strategyHolder);
-		
-		GridHelper gridhelper =  new GridHelper();
-		gridhelper.fillGridForStrategy(strategyHolder, parentGrid);
-		
+		/*
+		 * StrategyDiffCalculator strategyDifCalculator = new
+		 * StrategyDiffCalculator(strategy);
+		 * strategyDifCalculator.calculateStrategies(strategyHolder);
+		 * 
+		 * GridHelper gridhelper = new GridHelper();
+		 * gridhelper.fillGridForStrategy(strategyHolder, parentGrid);
+		 */
 	}
-	
-
-	
-	
 }

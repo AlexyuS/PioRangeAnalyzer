@@ -1,11 +1,13 @@
 package main.application.strategy;
 
-import java.util.List;
 
 public class PlayerStrategyHolder {
 
 	private final String playerName;
 	private StrategyHolder strategyHolder;
+	
+	private boolean isReferencePlayer;
+	
 	
 	public PlayerStrategyHolder(String name) {
 		this.playerName = name;
@@ -23,6 +25,14 @@ public class PlayerStrategyHolder {
 		this.strategyHolder = strategyHolder;
 	}
 
+	public boolean isReferencePlayer() {
+		return isReferencePlayer;
+	}
+
+	public void setReferencePlayer(boolean isReferencePlayer) {
+		this.isReferencePlayer = isReferencePlayer;
+	}
+	
 	@Override
 	public String toString() {
 		return playerName;

@@ -20,20 +20,19 @@ public class StrategyHolder {
 	private List<StrategyHolder> childs;
 	private StrategyHolder parent;
 
-	public StrategyHolder(String strategyName,StrategyHolder parent) {
+	public StrategyHolder(String strategyName) {
 		this.strategyName = strategyName;
 		this.individualCards = new ArrayList<>();
-		this.parent = parent;
 	}
 
 	
 	public void addCards(IndividualCardStrategy individualCard) {
-		double parentOccurance = findParrentTotalOccurance(individualCard);
-		individualCard.setOccurancePercentage(parentOccurance/100*individualCard.getOccurancePercentage());
-		individualCard.setAbsoluteOccurance(parentOccurance/100*individualCard.getAbsoluteOccurance());
+		individualCard.setOccurancePercentage(individualCard.getOccurancePercentage());
+		individualCard.setAbsoluteOccurance(individualCard.getAbsoluteOccurance());
 		individualCards.add(individualCard);
 	}
 
+	
 	public void setIndividualCards(List<IndividualCardStrategy> individualCards) {
 		this.individualCards = individualCards;
 	}
@@ -56,8 +55,14 @@ public class StrategyHolder {
 	
 	public void setParent(StrategyHolder parent) {
 		this.parent = parent;
+		individualCards.forEach(e->recalculateOccuranceConsideringParent(parent, e));
 	}
 
+	private void recalculateOccuranceConsideringParent(StrategyHolder parent,IndividualCardStrategy individualCard) {
+		double parentOccurance = findParrentTotalOccurance(parent,individualCard);
+		individualCard.setOccurancePercentage(parentOccurance/100*individualCard.getOccurancePercentage());
+		individualCard.setAbsoluteOccurance(parentOccurance/100*individualCard.getAbsoluteOccurance());
+	}
 
 	public void addChilds(List<StrategyHolder> childs) {
 		if (this.childs == null) {
@@ -78,7 +83,7 @@ public class StrategyHolder {
 		this.aggregatedCardStrategy = aggregatedCards;
 	}
 
-	private double findParrentTotalOccurance(IndividualCardStrategy individualCardStrategy) {
+	private double findParrentTotalOccurance(StrategyHolder parent,IndividualCardStrategy individualCardStrategy) {
 		return this.getParent().getIndividualCards().stream()
 				.filter(e->e.getCardHand().equals(individualCardStrategy.getCardHand()))
 				.findAny().orElseThrow(()->new StrategyChainMismatchException(individualCardStrategy, strategyName)).getOccurancePercentage();

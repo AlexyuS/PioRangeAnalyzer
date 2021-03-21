@@ -18,7 +18,10 @@ public class StrategyDiffCalculator {
 	}
 
 	public void calculateStrategies(StrategyHolder strategy1) {
-		//calculateCardDifferenceForIndividualCards(strategy1.getIndividualCards());
+		if(refStrategy==null || strategy1==null) {
+			return;
+		}
+		calculateCardDifferenceForIndividualCards(strategy1.getIndividualCards());
 		calculateCardDifferenceForAggregatedCards(strategy1.getAggregatedCardStrategy());
 	}
 

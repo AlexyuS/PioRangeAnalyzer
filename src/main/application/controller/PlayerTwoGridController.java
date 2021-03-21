@@ -1,28 +1,39 @@
 package main.application.controller;
 
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 
-import main.application.stage.PocketPairGridStage;
-import main.application.stage.SpringStage;
 import main.application.stage.TextAreaStage;
 import main.application.strategy.PlayerPoolStrategyHolder;
 import main.application.strategy.PlayerStrategyHolder;
 import main.application.strategy.StrategyHolder;
+import main.application.strategy.calculator.StrategyDiffCalculator;
+import main.application.strategy.helper.StrategyAggregator;
+import main.application.strategy.helper.StrategyHelper;
+import main.application.ui.MenuItemAddStrategy.OnStrategyInsertEvent;
+import main.application.ui.events.StrategyReloadEvent;
+import main.application.ui.helper.CardDetailLoader;
 import main.application.ui.helper.ChoiceSelectionHelper;
-import main.application.ui.helper.TextAreaStageHelper;
+import main.application.ui.helper.GridHelper;
 import main.application.ui.helper.TreeViewHelper;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
-public class PlayerTwoGridController implements GridController, InitializingBean {
+public class PlayerTwoGridController implements InitializingBean, ChangeListener<PlayerStrategyHolder> {
 	@SuppressWarnings("unused")
 	private final static Logger LOGGER = Logger.getLogger(PlayerTwoGridController.class.getName());
 
@@ -33,10 +44,13 @@ public class PlayerTwoGridController implements GridController, InitializingBean
 	public TextAreaStage textAreaStage;
 
 	@Autowired
-	private PocketPairGridStage pocketPairWindow;
-	
+	private CardDetailLoader cardDetailLoader;
+
 	@Autowired
 	public PlayerPoolStrategyHolder playerPool;
+
+	@Autowired
+	private ApplicationEventPublisher applicationEventPublisher;
 
 	@FXML
 	public TreeView<StrategyHolder> treeView2;
@@ -46,76 +60,112 @@ public class PlayerTwoGridController implements GridController, InitializingBean
 
 	@FXML
 	public GridPane cardGrid2;
-	
+
 	@FXML
 	public GridPane playerTwoHeader;
-	
+
+	private List<GridPane> cardsGrid;
+
+	private StrategyHolder refStrategy;
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		cardsGrid = cardGrid2.getChildren().stream().filter(e -> e instanceof GridPane).map(g -> (GridPane) g)
+				.collect(Collectors.toList());
+
+	}
+
+	@Override
+	public void changed(ObservableValue<? extends PlayerStrategyHolder> observable, PlayerStrategyHolder oldValue,
+			PlayerStrategyHolder newValue) {
+		TreeViewHelper.handleSelectionChanged(treeView2, oldValue, newValue);
+		GridHelper.clearGrid(cardsGrid);
+	}
 
 	@FXML
 	public void onTreeMouseClicked(MouseEvent e) {
 		if (e.getButton().compareTo(MouseButton.SECONDARY) == 0) {
 			return;
 		}
-		LOGGER.info("recalculation for "+PlayerTwoGridController.class.getName()+" was triggered");
-		requestColorGrid();
+		TreeItem<StrategyHolder> selectedItem = treeView2.getSelectionModel().getSelectedItem();
+		if (selectedItem == null || selectedItem.getValue() == null) {
+			return;
+		}
+		colorGrid(refStrategy, selectedItem.getValue());
 	}
 
-	private void requestColorGrid() {
+	@FXML
+	public void onMouseEntered(MouseEvent event) {
+		Node parentNode = event.getPickResult().getIntersectedNode().getParent();
+		Integer colIndex = GridPane.getColumnIndex(parentNode);
+		Integer rowIndex = GridPane.getRowIndex(parentNode);
+
+		TreeItem<StrategyHolder> selectedItem = treeView2.getSelectionModel().getSelectedItem();
+
+		cardDetailLoader.displayDetailedViewForSelection(selectedItem, colIndex, rowIndex, playerTwoHeader);
+
+	}
+
+	@EventListener
+	public void onStrategyReloadEvent(StrategyReloadEvent event) {
+		if (choiceBox2.getValue() == null) {
+			return;
+		}
+		if (!choiceBox2.getValue().getPlayerName().equals(event.getPlayerName())) {
+			return;
+		}
+
+		StrategyHolder rootStrategy = choiceBox2.getValue().getStrategyHolder();
+		TreeViewHelper.refreshTreeView(rootStrategy, treeView2);
+	}
+
+	@EventListener
+	public void addPlayerToChoiceList(PlayerStrategyHolder playerStrategy) {
+		ChoiceSelectionHelper.populateChoiceList(choiceBox2, playerStrategy);
+	}
+
+	@EventListener(condition = "#newPlayer.isReferencePlayer")
+	public void onReferenceSelectionChanged(PlayerStrategyHolder newPlayer) {
 		if (treeView2.getSelectionModel().getSelectedItem() == null) {
 			return;
 		}
-		StrategyHolder strategy = treeView2.getSelectionModel().getSelectedItem().getValue();
-		mainController.fillGridForStrategy(strategy,cardGrid2);
+		GridHelper.clearGrid(cardsGrid);
 	}
 
-	
-	@Override
-	public void onTreeInsert(ActionEvent e) {
-		TextAreaStageHelper.open(textAreaStage, choiceBox2, treeView2);
-	}
-
-	@Override
-	public void onTreeDelete(ActionEvent e) {
-		StrategyHolder value = treeView2.getSelectionModel().getSelectedItem().getValue();
+	@EventListener
+	public void onStrategyInsertionEvent(OnStrategyInsertEvent event) {
+		if (event.getPlayerIndex() != 2) {
+			return;
+		}
+		TreeItem<StrategyHolder> selectedItem = treeView2.getSelectionModel().getSelectedItem();
+		if(selectedItem==null || selectedItem.getValue()==null) {
+			return;
+		}
 		
-		if(value.getStrategy().equals(treeView2.getRoot().getValue().getStrategy())) {
+		event.getStrategies().forEach(e->e.setAggregatedCardStrategy(StrategyAggregator.aggregateIndividualCards(e.getIndividualCards())));
+		event.getStrategies().forEach(e->StrategyAggregator.aggregateIndividualCards(e.getIndividualCards()));
+
+		applicationEventPublisher.publishEvent(new StrategyReloadEvent(choiceBox2.getValue().getPlayerName()));
+	}
+
+	@EventListener
+	public void onRefStrategyChanged(StrategyHolder refStrategy) {
+		this.refStrategy = refStrategy;
+		if (treeView2.getSelectionModel().getSelectedItem() == null) {
 			return;
 		}
-		PlayerStrategyHolder playerStrategyHolder = choiceBox2.getValue();
-		TreeViewHelper.removeNode(playerStrategyHolder.getPlayerName(), treeView2);
-		this.mainController.notifyStrategyRemove(playerStrategyHolder.getPlayerName(),value);
+
+		StrategyHolder ownStrategy = treeView2.getSelectionModel().getSelectedItem().getValue();
+		colorGrid(refStrategy, ownStrategy);
 
 	}
 
-	@Override
-	public void onSelectionChanged(PlayerStrategyHolder oldSelection, PlayerStrategyHolder newSelection) {
-		TreeViewHelper.handleSelectionChanged(treeView2, oldSelection, newSelection);
+	private void colorGrid(StrategyHolder refStrategy, StrategyHolder ownStrategy) {
+		StrategyDiffCalculator strategyDiffCalculator = new StrategyDiffCalculator(refStrategy);
+		strategyDiffCalculator.calculateStrategies(ownStrategy);
+
+		GridHelper gridhelper = new GridHelper();
+		gridhelper.fillGridForStrategy(ownStrategy, cardGrid2);
 	}
 
-	@Override
-	public void addPlayerToChoiceList(PlayerStrategyHolder player) {
-		ChoiceSelectionHelper.populateChoiceList(choiceBox2, player);
-	}
-
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		this.mainController.registerForAnyPlayerSelectionChanged(this);
-		this.mainController.registerForTreeViewChanged(this);
-	}
-
-	@Override
-	public void triggerRecalculation() {
-		requestColorGrid();
-	}
-
-	@Override
-	public void removeTreeItemForPlayerAndStrategy(String playerName, StrategyHolder strategy) {
-		if(!choiceBox2.getValue().getPlayerName().equals(playerName)) {
-			return;
-		}
-		treeView2.getRoot().getChildren().removeIf(e->e.getValue().getStrategy()==strategy.getStrategy());
-	}
-	
-	
 }

@@ -7,6 +7,8 @@ module PioRangeAnalyzer {
 	exports main.application.strategy;
 	exports main.application.ui;
 	exports main.application.strategy.calculator;
+	exports main.application.ui.helper;
+	exports main.application.ui.events;
 	exports test;
 	
 	requires java.logging;
@@ -26,5 +28,7 @@ module PioRangeAnalyzer {
 	opens main.application.strategy.calculator;
 	opens main.application.stage to spring.core;
 	opens main.application.controller to spring.core;
+	opens main.application.ui.helper to spring.core;
+	opens main.application.ui to spring.core;
 
 }

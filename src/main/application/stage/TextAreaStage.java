@@ -7,44 +7,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import main.application.controller.TextAreaController;
-import main.application.strategy.PlayerStrategyHolder;
-import main.application.strategy.StrategyHolder;
-import javafx.scene.control.TreeItem;
-import javafx.stage.Stage;
+import javafx.stage.Modality;
 
 @Component
-public class TextAreaStage extends SpringStage<TextAreaController>{
-    
-    private PlayerStrategyHolder playerStrategyHolder;
-    
-    private TreeItem<StrategyHolder> treeItem;
-    
+public class TextAreaStage extends SpringStage<TextAreaController>{    
+    private String result;
     
 	@Autowired
 	public TextAreaStage(String path) {
 		super(path);
-	}
-
-	@Override
-	protected void afterInitialize(Stage stage) {
-		stage.setTitle("Please insert the range");
-	}
-	
-	
-	public void open(TreeItem<StrategyHolder> treeItem,PlayerStrategyHolder playerName) {
-		super.open();
-		this.treeItem = treeItem;
-		this.playerStrategyHolder = playerName;
+		getStage().initModality(Modality.APPLICATION_MODAL);
 	}
 
 	
 	
-	public TreeItem<StrategyHolder> getTreeItem(){
-		return this.treeItem;
+	public void showAndWait() {
+		getStage().setTitle("Please insert the range");
+		getStage().showAndWait();
+	}
+
+	public String getResult() {
+		return this.result;
 	}
 	
-	public PlayerStrategyHolder getPlayerStrategy() {
-		return this.playerStrategyHolder;
+	public void closeStage(String input) {
+		this.result = input;
+		close();
 	}
+	
 
 }

@@ -12,6 +12,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
 import main.application.cards.AggregatedCardStrategy;
+import main.application.cards.CardFactory;
+import main.application.cards.CardHand;
+import main.application.cards.IndividualCardStrategy;
 import main.application.strategy.StrategyHolder;
 
 public class GridHelper {
@@ -118,15 +121,69 @@ public class GridHelper {
 
 		gridPane.add(backgroundPane, 0, rowIndex, 2, 1);
 		backgroundPane.toBack();
+		
+		gridPane.setDisable(false);
 	}
+	
+	
 
-	private static void clearGrid(List<GridPane> grid) {
+	public static void clearGrid(List<GridPane> grid) {
 		grid.forEach(e -> e.getChildren().removeIf(p -> p instanceof Pane));
 		grid.forEach(e -> e.getChildren().forEach(c -> {
 			if (c instanceof Text) {
 				((Text) c).setText("");
 			}
 		}));
+		grid.forEach(e->e.setDisable(true));
+	}
+	
+	
+	
+	public static List<IndividualCardStrategy> getSelectedIndividualSubgroupFromGrid(StrategyHolder baseStrategy, int colIndex,int rowIndex){
+		CardHand selectedCard = findSelectedCardHand(colIndex, rowIndex);
+		
+		List<IndividualCardStrategy> individualCardStrategySubgroup = baseStrategy.getIndividualCards()
+				.stream().filter(card -> belongsToAggregatedGroup(card, selectedCard)).collect(Collectors.toList());
+		
+		return individualCardStrategySubgroup;
+	}
+	private static boolean belongsToAggregatedGroup(IndividualCardStrategy cardFromGroup, CardHand selectedCard) {
+		CardHand cardhand = cardFromGroup.getCardHand();
+
+		char groupShortcut = selectedCard.getGroupShortcut();
+
+		if (!cardhand.getHighCard().equals(selectedCard.getHighCard())) {
+			return false;
+		}
+		if (!cardhand.getLowCard().equals(selectedCard.getLowCard())) {
+			return false;
+		}
+
+		if (groupShortcut == 'o' && cardhand.getHighCardColor().equals(cardhand.getLowCardColor())) {
+			return false;
+		}
+
+		if (groupShortcut == 's' && !(cardhand.getHighCardColor().equals(cardhand.getLowCardColor()))) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private static CardHand findSelectedCardHand(int colIndex, int rowIndex) {
+		CardFactory cardFactory =  new CardFactory();
+		if (colIndex == rowIndex) {
+			return cardFactory.pairedFrom(colIndex, rowIndex);
+		}
+
+		if (colIndex > rowIndex) {
+			return cardFactory.suitedFrom(colIndex, rowIndex);
+		}
+
+		if (colIndex < rowIndex) {
+			return cardFactory.offsuitedFrom(colIndex, rowIndex);
+		}
+		return null;
 	}
 
 }

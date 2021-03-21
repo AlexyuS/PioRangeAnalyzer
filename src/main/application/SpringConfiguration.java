@@ -30,7 +30,6 @@ public class SpringConfiguration {
 	@Bean
 	public SpringStage<MainController> mainStage() throws IOException {
 		SpringStage<MainController> mainStage = new MainStage("resources/diagram.fxml", stage);
-		mainStage.initialize();
 		mainStage.open();
 		return mainStage;
 	}
@@ -38,14 +37,12 @@ public class SpringConfiguration {
 	@Bean
 	public TextAreaStage textAreaStage() throws IOException {
 		TextAreaStage textAreaStage = new TextAreaStage("resources/textAreaStrategy.fxml");
-		textAreaStage.initialize();
 		return textAreaStage;
 	}
 
 	@Bean
 	public PreflopInputStage preflopInputStage() throws IOException {
 		PreflopInputStage preflopInputStage = new PreflopInputStage("resources/preflopInputTextArea.fxml");
-		preflopInputStage.initialize();
 		return preflopInputStage;
 	}
 

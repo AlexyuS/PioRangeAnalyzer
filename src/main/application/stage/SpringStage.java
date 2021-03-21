@@ -3,13 +3,16 @@ package main.application.stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
+import org.springframework.beans.factory.InitializingBean;
+
 import main.application.controller.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public abstract class SpringStage<E extends Controller> {
+public abstract class SpringStage<E extends Controller> implements InitializingBean{
 	private final String path;
 	private final Stage stage;
 	
@@ -25,7 +28,8 @@ public abstract class SpringStage<E extends Controller> {
 		this.stage = new Stage();
 	}
 	
-	public void initialize() throws IOException {
+	@Override
+	public void afterPropertiesSet() throws IOException {
 		URL resource = new File(path).toURI().toURL();
 		
 		loader = new FXMLLoader();
@@ -35,7 +39,6 @@ public abstract class SpringStage<E extends Controller> {
 		Scene scene  =  new Scene(panel);
 		stage.setScene(scene);
 
-		afterInitialize(stage);
 	}
 	
 	public void open() {
@@ -48,11 +51,8 @@ public abstract class SpringStage<E extends Controller> {
 	public E getController() {
 		return loader.getController();
 	}
-	
-	protected abstract void afterInitialize(Stage stage);
-	
-
-	protected Stage getStage(){
+		
+	public Stage getStage(){
 		return stage;
 	}
 }

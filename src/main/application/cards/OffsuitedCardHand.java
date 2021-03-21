@@ -23,6 +23,6 @@ public class OffsuitedCardHand extends CardHand{
 	}
 	@Override
 	public String toString() {
-		return getHighCard().getLabel()+getLowCard().getLabel()+"o";
+		return getHighCard().getLabel()+getLowCard().getLabel()+getGroupShortcut();
 	}
 }

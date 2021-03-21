@@ -18,10 +18,10 @@ public class SuitedCardHand extends CardHand{
 
 	@Override
 	public char getGroupShortcut() {
-		return ' ';
+		return 's';
 	}
 	@Override
 	public String toString() {
-		return getHighCard().getLabel()+getLowCard().getLabel()+"s";
+		return getHighCard().getLabel()+getLowCard().getLabel()+getGroupShortcut();
 	}
 }

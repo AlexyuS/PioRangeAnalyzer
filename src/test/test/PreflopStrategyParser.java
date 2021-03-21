@@ -14,7 +14,7 @@ import main.application.fileParser.StrategyReader;
 import main.application.strategy.StrategyHolder;
 
 public class PreflopStrategyParser {
-	private IndividualCardStrategy AdAs;
+	private IndividualCardStrategy AcAh;
 
 	private IndividualCardStrategy As6s;
 
@@ -27,7 +27,7 @@ public class PreflopStrategyParser {
 	@Before
 	public void setUp() {
 
-		AdAs = new IndividualCardStrategy(new IndividualCardHand(Card.ACE, CardColor.CLUBS, Card.ACE, CardColor.HEARTS),
+		AcAh = new IndividualCardStrategy(new IndividualCardHand(Card.ACE, CardColor.HEARTS, Card.ACE, CardColor.CLUBS),
 				100);
 
 		As6s = new IndividualCardStrategy(
@@ -53,11 +53,11 @@ public class PreflopStrategyParser {
 		List<IndividualCardStrategy> results = result.getIndividualCards();
 
 		{
-			int indexOf = results.indexOf(AdAs);
-			Assert.assertTrue("Card " + AdAs + " not found in database", indexOf != -1);
+			int indexOf = results.indexOf(AcAh);
+			Assert.assertTrue("Card " + AcAh + " not found in database", indexOf != -1);
 
 			double occurancePercentage = results.get(indexOf).getOccurancePercentage();
-			Assert.assertTrue("Wrong occurance for card" + AdAs + ". Expected" + AdAs.getOccurancePercentage()
+			Assert.assertTrue("Wrong occurance for card" + AcAh + ". Expected" + AcAh.getOccurancePercentage()
 					+ "But found " + occurancePercentage, occurancePercentage == 100);
 		}
 		{

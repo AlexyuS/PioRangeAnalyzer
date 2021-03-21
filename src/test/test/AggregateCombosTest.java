@@ -19,7 +19,7 @@ public class AggregateCombosTest {
 
 	@Before
 	public void setUp() {
-		strategyHolder = new StrategyHolder("Bet 30",null);
+		strategyHolder = new StrategyHolder("Bet 30");
 	}
 
 	@Test

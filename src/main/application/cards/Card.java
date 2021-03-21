@@ -7,8 +7,8 @@ public enum Card {
 	private int cardRank;
 	private String label;
 
-	Card(Integer string,String label) {
-		this.cardRank = string;
+	Card(Integer cardRank,String label) {
+		this.cardRank = cardRank;
 		this.label = label;
 	}
 
@@ -49,6 +49,38 @@ public enum Card {
 		}
 	}
 
+	public static Card createFrom(int cardRank) throws Exception{
+		switch(cardRank) {
+		case 14:
+			return ACE;
+		case 13:
+			return KING;
+		case 12:
+			return QUEEN;
+		case 11:
+			return JACK;
+		case 10:
+			return TEN;
+		case 9:
+			return NINE;
+		case 8:
+			return EIGHT;
+		case 7:
+			return SEVEN;
+		case 6:
+			return SIX;
+		case 5:
+			return FIVE;
+		case 4:
+			return FOUR;
+		case 3:
+			return THREE;
+		case 2:
+			return TWO;
+		default:
+			throw new Exception("Raw card could not be converted to a type");
+		}
+	}
 	
 	public String getLabel() {
 		return this.label;

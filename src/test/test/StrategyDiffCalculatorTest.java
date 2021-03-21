@@ -23,7 +23,7 @@ public class StrategyDiffCalculatorTest {
 	
 	@Before
 	public void setUp() {
-		strategyHolderRef =  new StrategyHolder("BET30",null);
+		strategyHolderRef =  new StrategyHolder("BET30");
 		strategyHolderRef.addCards(new IndividualCardStrategy(new IndividualCardHand(Card.ACE, CardColor.CLUBS, Card.KING, CardColor.CLUBS),50));
 		strategyHolderRef.addCards(new IndividualCardStrategy(new IndividualCardHand(Card.ACE, CardColor.CLUBS, Card.QUEEN, CardColor.CLUBS),50));
 		strategyHolderRef.addCards(new IndividualCardStrategy(new IndividualCardHand(Card.ACE, CardColor.CLUBS, Card.JACK, CardColor.CLUBS),50));
@@ -48,7 +48,7 @@ public class StrategyDiffCalculatorTest {
 	public void testIndividualCardStrategyDiff() {
 		 StrategyDiffCalculator strategyDiffCalculator =  new StrategyDiffCalculator(strategyHolderRef);
 		 
-		 StrategyHolder strategyToCalculate = new StrategyHolder("BET40",null);
+		 StrategyHolder strategyToCalculate = new StrategyHolder("BET40");
 		 
 		 //does exist
 		 IndividualCardStrategy indivStrat1 = new IndividualCardStrategy(new IndividualCardHand(Card.ACE, CardColor.CLUBS, Card.KING, CardColor.CLUBS),75);

@@ -16,11 +16,12 @@ import main.application.cards.IndividualCardStrategy;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class PocketPairGridStage extends AbstractCardDetailStage {
+public class OffsuitedPairGridStage extends AbstractCardDetailStage {
 
-	public PocketPairGridStage() throws IOException {
-		super("resources/pocketPairGrid.fxml");
+	public OffsuitedPairGridStage() throws IOException {
+		super("resources/offsuitedPairGrid.fxml");
 	}
+
 
 	public void colorCardGridForIndividualStrategy(List<IndividualCardStrategy> cardStrategy) {
 		cardStrategy.forEach(e->colorGridForCard(e));
@@ -28,7 +29,7 @@ public class PocketPairGridStage extends AbstractCardDetailStage {
 
 	@Override
 	public GridPane getGridPane() {
-		return (GridPane) this.getStage().getScene().lookup("#pocketPairGrid");
+		return (GridPane) this.getStage().getScene().lookup("#offsuitedPairGrid");
 	}
 
 }

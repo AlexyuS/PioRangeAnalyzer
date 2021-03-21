@@ -72,7 +72,7 @@ public class StrategyReader {
 	}
 
 	public StrategyHolder parsePreflopStrategy(String content) {
-		StrategyHolder preflopStrategy = new StrategyHolder("Preflop",null);
+		StrategyHolder preflopStrategy = new StrategyHolder("Preflop");
 		List<String> splittedHands = Arrays.asList(content.split(","));
 
 		List<IndividualCardStrategy> individualCardStrategy = splittedHands.stream().map(e -> {
@@ -281,7 +281,7 @@ public class StrategyReader {
 
 		String[] rawStrategy = line.trim().split(",");
 		for (int i = 1; i < rawStrategy.length; i++) {
-			strategies.add(new StrategyHolder(rawStrategy[i],parentStrategy));
+			strategies.add(new StrategyHolder(rawStrategy[i]));
 		}
 
 		return strategies;
