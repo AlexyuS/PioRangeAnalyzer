@@ -1,7 +1,5 @@
 package main.application.stage;
 
-import java.util.Arrays;
-
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -49,11 +47,11 @@ public abstract class AbstractCardDetailStage extends SpringStage<Controller> {
 		return sc;
 	}
 
+	
 	protected void colorGridForCard(IndividualCardStrategy strategy) {
-
+		
 		IndividualCardHand cardHand = strategy.getCardHand();
 		GridPane gridPane = determinGridForCardHand(cardHand);
-		GridHelper.clearGrid(Arrays.asList(gridPane));
 		
 		Text textLabel = determineTextLabelForCardHand(cardHand);
 
@@ -81,4 +79,6 @@ public abstract class AbstractCardDetailStage extends SpringStage<Controller> {
 		}
 		GridHelper.colorGrid(gridPane, totalOccurance, "yellow", 2);
 	}
+	
+	protected abstract void clearCardGrid();
 }

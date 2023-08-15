@@ -18,7 +18,6 @@ import main.application.strategy.StrategyHolder;
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CardDetailLoader {
-	
 	@Autowired
 	private PocketPairGridStage pocketPairWindow;
 
@@ -47,6 +46,7 @@ public class CardDetailLoader {
 		header.getChildren().removeIf(e -> e.getId().equals("suitedPairGrid"));
 		header.getChildren().removeIf(e -> e.getId().equals("offsuitedPairGrid"));
 
+			
 		List<IndividualCardStrategy> selectedGroup = GridHelper
 				.getSelectedIndividualSubgroupFromGrid(strategy.getValue(), colIndex, rowIndex);
 
@@ -64,5 +64,7 @@ public class CardDetailLoader {
 			header.add(offsuitedPairWindow.getGridPane(), 2, 0, 1, 2);
 			offsuitedPairWindow.colorCardGridForIndividualStrategy(selectedGroup);
 		}
+		
+
 	}
 }

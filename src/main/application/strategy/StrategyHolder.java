@@ -60,8 +60,10 @@ public class StrategyHolder {
 
 	private void recalculateOccuranceConsideringParent(StrategyHolder parent,IndividualCardStrategy individualCard) {
 		double parentOccurance = findParrentTotalOccurance(parent,individualCard);
-		individualCard.setOccurancePercentage(parentOccurance/100*individualCard.getOccurancePercentage());
-		individualCard.setAbsoluteOccurance(parentOccurance/100*individualCard.getAbsoluteOccurance());
+		double parentAbsoluteOccurance = findParrentTotalOccuranceAbs(parent, individualCard);
+		
+		individualCard.setAbsoluteOccurance(individualCard.getOccurancePercentage()/100*parentAbsoluteOccurance);
+		individualCard.setOccurancePercentage(individualCard.getOccurancePercentage()/100*parentOccurance);
 	}
 
 	public void addChilds(List<StrategyHolder> childs) {
@@ -87,6 +89,12 @@ public class StrategyHolder {
 		return this.getParent().getIndividualCards().stream()
 				.filter(e->e.getCardHand().equals(individualCardStrategy.getCardHand()))
 				.findAny().orElseThrow(()->new StrategyChainMismatchException(individualCardStrategy, strategyName)).getOccurancePercentage();
+	}
+	
+	private double findParrentTotalOccuranceAbs(StrategyHolder parent,IndividualCardStrategy individualCardStrategy) {
+		return this.getParent().getIndividualCards().stream()
+				.filter(e->e.getCardHand().equals(individualCardStrategy.getCardHand()))
+				.findAny().orElseThrow(()->new StrategyChainMismatchException(individualCardStrategy, strategyName)).getAbsoluteOccurance();
 	}
 	
 	@Override

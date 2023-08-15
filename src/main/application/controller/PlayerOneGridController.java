@@ -107,8 +107,8 @@ public class PlayerOneGridController implements ChangeListener<PlayerStrategyHol
 		if(selectedItem==null || selectedItem.getValue()==null) {
 			return;
 		}
-		event.getStrategies().forEach(e->e.setAggregatedCardStrategy(StrategyAggregator.aggregateIndividualCards(e.getIndividualCards())));
 		StrategyHelper.addStrategiesToParrent(selectedItem.getValue(), event.getStrategies());
+		event.getStrategies().forEach(e->e.setAggregatedCardStrategy(StrategyAggregator.aggregateIndividualCards(e.getIndividualCards())));
 		applicationEventPublisher.publishEvent(new StrategyReloadEvent(choiceBox1.getValue().getPlayerName()));
 
 	}
